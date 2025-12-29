@@ -11,7 +11,7 @@ class SecuritySituation(models.Model):
     event_date = fields.Datetime(string="Fecha y Hora", default=fields.Datetime.now, required=True, tracking=True)
 
     name = fields.Char(string='Referencia', required=True, copy=False, index=True,
-                       default=lambda self: self.env['ir.sequence'].next_by_code('security.situation'),
+                       default=lambda self: _('Nueva Situación'),
                        tracking=True, readonly=True)
 
     type = fields.Selection([
@@ -205,7 +205,7 @@ class SecuritySituation(models.Model):
     @api.model_create_multi
     def create(self, vals_list):
         for vals in vals_list:
-            if vals.get('name', _('New')) == _('New'):
+            if vals.get('name', _('Nueva Situación')) == _('Nueva Situación'):
                 vals['name'] = (self.env['ir.sequence'].next_by_code('security.situation'))
         return super().create(vals_list)
 
