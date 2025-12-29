@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<odoo>
+    <menuitem  id="security_health_root_menu"
+               name="Seguridad y Salud"
+               sequence="10"
+               web_icon="security_and_health,static/description/icon.png"
+               groups="security_and_health.group_security_and_health_manager,security_and_health.group_security_and_health_employee"/>
+
+<!--        Pestaña Situaciones-->
+        <menuitem id="situations_menu" name="Situaciones"
+              parent="security_health_root_menu" action="action_security_situation" sequence="10"/>
+
+<!--        Sub-menús Situaciónes-->
+        <menuitem id="security_situation_menu" name="Situaciones de Seguridad"
+              parent="situations_menu" action="action_security_situation" sequence="10"/>
+
+        <menuitem id="security_attention_menu" name="Atenciones Registradas"
+              parent="situations_menu" action="action_security_attention" sequence="15"/>
+
+<!--&lt;!&ndash;        Pestaña estadisticas dentro de situaciones (Comentar el siguiente menu)&ndash;&gt;-->
+<!--        <menuitem id="security_analysis_menu2" name="Estadísticas de Seguridad"-->
+<!--              parent="situations_menu" action="action_security_situation_analysis" sequence="20"/>-->
+
+<!--        Pestaña Estadisticas-->
+        <menuitem id="security_analysis_menu" name="Estadísticas de Seguridad"
+              parent="security_health_root_menu" action="action_security_situation_analysis" sequence="20"/>
+
+<!--        Pestaña Seguimiento Salud-->
+        <menuitem id="employee_health_root_tracking_menu" name="Seguimiento de Salud"
+              parent="security_health_root_menu" sequence="30"/>
+
+<!--        Sub-menús Seguimiento de salud-->
+        <menuitem id="employee_pressure_daily_menu" name="Presión Diaria"
+              parent="employee_health_root_tracking_menu" action="action_employee_pressure_daily" sequence="10"/>
+
+        <menuitem id="employee_health_record_menu" name="Registros de Salud"
+              parent="employee_health_root_tracking_menu" action="action_employee_health_record" sequence="15"/>
+
+        <menuitem id="medical_analysis_menu" name="Análisis Médicos"
+              parent="employee_health_root_tracking_menu" action="action_medical_analysis" sequence="20"/>
+
+<!--        Pestaña Reportes Finales-->
+        <menuitem id="final_reports_menu" name="Reportes Finales"
+              parent="security_health_root_menu" action="action_final_report" sequence="40"/>
+
+<!--        Pestaña Catálogos-->
+        <menuitem id="catalogs_menu" name="Catálogos"
+              parent="security_health_root_menu" sequence="50" groups="security_and_health.group_security_and_health_manager"/>
+
+<!--        Sub-menús Catálogos-->
+        <menuitem id="work_center_menu" name="Centros y Areas de Trabajo"
+              parent="catalogs_menu" action="action_work_center" sequence="10"/>
+
+        <menuitem id="injury_type_menu" name="Tipos de Lesión"
+              parent="catalogs_menu" action="action_injury_type" sequence="20"/>
+
+        <menuitem id="medical_analysis_parameter_menu" name="Parámetros de Análisis"
+              parent="catalogs_menu" action="action_medical_analysis_parameter" sequence="25"/>
+
+        <menuitem id="menu_medical_analysis_type" name="Tipos de Análisis"
+              parent="catalogs_menu" action="action_medical_analysis_type" sequence="30"/>
+
+</odoo>

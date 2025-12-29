@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+<!--        Parametros - Biometria Hemática-->
+
+<!--        Plantilla base:-->
+<!--        <record id="parameter_" model="medical.analysis.parameter">-->
+<!--			<field name="name"></field>-->
+<!--			<field name="reference_range"></field>-->
+<!--			<field name="unit_of_measure"></field>-->
+
+        <record id="parameter_hemoglobina" model="medical.analysis.parameter">
+			<field name="name">Hemoglobina</field>
+			<field name="reference_range">14-18</field>
+			<field name="unit_of_measure">g/dL</field>
+		</record>
+
+        <record id="parameter_hematrocito" model="medical.analysis.parameter">
+			<field name="name">Hematrocito</field>
+			<field name="reference_range">42-52</field>
+			<field name="unit_of_measure">%</field>
+		</record>
+
+        <record id="parameter_VCM" model="medical.analysis.parameter">
+			<field name="name">Volumen corpuscular medio (VCM)</field>
+			<field name="reference_range">80-95</field>
+			<field name="unit_of_measure">fL</field>
+		</record>
+
+        <record id="parameter_CMHC" model="medical.analysis.parameter">
+			<field name="name">Hemoglobina corpuscular media (CMHC)</field>
+			<field name="reference_range">27-31</field>
+			<field name="unit_of_measure">pg</field>
+        </record>
+
+        <record id="parameter_ADE" model="medical.analysis.parameter">
+			<field name="name">Amplitud de distribución eritrocítica</field>
+			<field name="reference_range">11-14.5</field>
+			<field name="unit_of_measure">%</field>
+        </record>
+
+        <record id="parameter_eritrocitos" model="medical.analysis.parameter">
+			<field name="name">Eritrocitos</field>
+			<field name="reference_range">4,000,000-5,000,000</field>
+			<field name="unit_of_measure">mm^3</field>
+        </record>
+
+        <record id="parameter_leucocitos_totales" model="medical.analysis.parameter">
+			<field name="name">Leucocitos Totales</field>
+			<field name="reference_range">5,000-10,000</field>
+			<field name="unit_of_measure">mm^3</field>
+        </record>
+
+        <record id="parameter_neutrofilos" model="medical.analysis.parameter">
+			<field name="name">Neutrófilos</field>
+			<field name="reference_range"></field>
+			<field name="unit_of_measure"></field>
+        </record>
+
+        <record id="parameter_linfocitos" model="medical.analysis.parameter">
+			<field name="name">Linfocitos</field>
+			<field name="reference_range"></field>
+			<field name="unit_of_measure"></field>
+        </record>
+
+        <record id="parameter_monocitos" model="medical.analysis.parameter">
+			<field name="name">Monocitos</field>
+			<field name="reference_range"></field>
+			<field name="unit_of_measure"></field>
+        </record>
+
+        <record id="parameter_eosinofilos" model="medical.analysis.parameter">
+			<field name="name">Eosinófilos</field>
+			<field name="reference_range"></field>
+			<field name="unit_of_measure"></field>
+        </record>
+
+        <record id="parameter_basofilos" model="medical.analysis.parameter">
+			<field name="name">Basófilos</field>
+			<field name="reference_range"></field>
+			<field name="unit_of_measure"></field>
+        </record>
+
+        <record id="parameter_plaquetas" model="medical.analysis.parameter">
+			<field name="name">Plaquetas</field>
+			<field name="reference_range">150,000-450,000</field>
+			<field name="unit_of_measure">mm^3</field>
+        </record>
+
+        <record id="analysis_type_biometria" model="medical.analysis.type">
+            <field name="name">Biometría Hematica</field>
+            <field name="parameter_ids" eval="[(6, 0, [
+            ref('parameter_hemoglobina'),
+            ref('parameter_hematrocito'),
+            ref('parameter_VCM'),
+            ref('parameter_CMHC'),
+            ref('parameter_ADE'),
+            ref('parameter_leucocitos_totales'),
+            ref('parameter_linfocitos'),
+            ref('parameter_monocitos'),
+            ref('parameter_eosinofilos'),
+            ref('parameter_basofilos'),
+            ref('parameter_plaquetas'),
+            ref('parameter_eritrocitos'),
+            ref('parameter_neutrofilos'),
+            ])]"/>
+        </record>
+
+<!--        Funcion renal-->
+
+        <record id="parameter_BUN" model="medical.analysis.parameter">
+			<field name="name">Nitrógeno ureico en sangre (BUN)</field>
+			<field name="reference_range">10-20</field>
+			<field name="unit_of_measure">mg/dL</field>
+        </record>
+
+        <record id="parameter_acido_urico" model="medical.analysis.parameter">
+			<field name="name">Ácido úrico sanguíneo</field>
+			<field name="reference_range"></field>
+			<field name="unit_of_measure">mg/dL</field>
+        </record>
+
+        <record id="parameter_creatina_sanguinea" model="medical.analysis.parameter">
+			<field name="name">Creatina Sanguinea</field>
+			<field name="reference_range"></field>
+			<field name="unit_of_measure">mg/dL</field>
+        </record>
+
+        <record id="parameter_CrCI" model="medical.analysis.parameter">
+			<field name="name">Depuración de creatina</field>
+			<field name="reference_range"></field>
+			<field name="unit_of_measure">mL/min</field>
+        </record>
+
+<!--        Pruebas pancreaticas-->
+
+        <record id="parameter_amilasa" model="medical.analysis.parameter">
+			<field name="name">Amilasa</field>
+			<field name="reference_range">35-115</field>
+			<field name="unit_of_measure">U/L</field>
+        </record>
+
+        <record id="parameter_lipasa" model="medical.analysis.parameter">
+			<field name="name">Lipasa</field>
+			<field name="reference_range">3-19</field>
+			<field name="unit_of_measure">U/dL</field>
+        </record>
+
+<!--        Funcion hepatica-->
+
+        <record id="parameter_bilirrubina_total" model="medical.analysis.parameter">
+			<field name="name">Bilirrubina total</field>
+			<field name="reference_range">0.3-1.0</field>
+			<field name="unit_of_measure">mg/dL</field>
+        </record>
+
+        <record id="parameter_bilirrubina_indirecta" model="medical.analysis.parameter">
+			<field name="name">Bilirrubina Indirecta</field>
+			<field name="reference_range">0.2-0.8</field>
+			<field name="unit_of_measure">mg/dL</field>
+        </record>
+
+        <record id="parameter_bilirrubina_directa" model="medical.analysis.parameter">
+			<field name="name">Bilirrubina Directa</field>
+			<field name="reference_range">0.1-0.3</field>
+			<field name="unit_of_measure">mg/dL</field>
+        </record>
+
+        <record id="parameter_proteina_total" model="medical.analysis.parameter">
+			<field name="name">Proteína total</field>
+			<field name="reference_range">6.0-8.3</field>
+			<field name="unit_of_measure">g/dL</field>
+        </record>
+
+        <record id="parameter_Albumina" model="medical.analysis.parameter">
+			<field name="name">Albumina</field>
+			<field name="reference_range">3.4-5.4</field>
+			<field name="unit_of_measure">g/dL</field>
+        </record>
+
+        <record id="parameter_globulina" model="medical.analysis.parameter">
+			<field name="name">Globumina</field>
+			<field name="reference_range">2.3-3.4</field>
+			<field name="unit_of_measure">g/dL</field>
+        </record>
+
+        <record id="parameter_alfa1_globulina" model="medical.analysis.parameter">
+			<field name="name">Alfa1 - globulina</field>
+			<field name="reference_range">0.1-0.3</field>
+			<field name="unit_of_measure">g/dL</field>
+        </record>
+
+        <record id="parameter_alfa2_globulina" model="medical.analysis.parameter">
+			<field name="name">Alfa2 - globulina</field>
+			<field name="reference_range">0.6-1</field>
+			<field name="unit_of_measure">g/dL</field>
+        </record>
+
+        <record id="parameter_beta_globulina" model="medical.analysis.parameter">
+            <field name="name">Beta - globulina</field>
+            <field name="reference_range">0.7-1.1</field>
+            <field name="unit_of_measure">g/dL</field>
+        </record>
+
+        <record id="parameter_amilasa_sanguinea" model="medical.analysis.parameter">
+            <field name="name">Amilasa Sanguínea</field>
+            <field name="reference_range">30-220</field>
+            <field name="unit_of_measure">U/L</field>
+        </record>
+
+        <record id="parameter_GGTP" model="medical.analysis.parameter">
+            <field name="name">Gammaglutamil Transpeptidasa</field>
+            <field name="reference_range"></field>
+            <field name="unit_of_measure">U/L</field>
+        </record>
+
+        <record id="parameter_ALT" model="medical.analysis.parameter">
+            <field name="name">Alanino Aminotransferasa</field>
+            <field name="reference_range">4-36</field>
+            <field name="unit_of_measure">U/L</field>
+        </record>
+
+        <record id="parameter_AST" model="medical.analysis.parameter">
+            <field name="name">Aspartato Aminotransferasa</field>
+            <field name="reference_range">0-35</field>
+            <field name="unit_of_measure">U/L</field>
+        </record>
+
+        <record id="parameter_LDH" model="medical.analysis.parameter">
+            <field name="name">Deshidrogenasa Láctica total</field>
+            <field name="reference_range">100-190</field>
+            <field name="unit_of_measure">U/L</field>
+        </record>
+
+        <record id="parameter_LAP" model="medical.analysis.parameter">
+            <field name="name">Leucina Aminopeptidasa</field>
+            <field name="reference_range"></field>
+            <field name="unit_of_measure">U/mL</field>
+        </record>
+
+        <record id="parameter_ALP" model="medical.analysis.parameter">
+            <field name="name">Fosfata Alcalina</field>
+            <field name="reference_range">30-120</field>
+            <field name="unit_of_measure">U/L</field>
+        </record>
+
+<!--        Gasometría Arterial-->
+
+        <record id="parameter_ph" model="medical.analysis.parameter">
+            <field name="name">pH</field>
+            <field name="reference_range">7.35-7.45</field>
+            <field name="unit_of_measure">pH</field>
+        </record>
+
+<!--  ########################################################################################  -->
+
+<!--        Tipo de lesiones-->
+
+        <record id="injury_fracture" model="injury.type">
+            <field name="name">Fractura</field>
+            <field name="description">Una fractura es un hueso roto.</field>
+        </record>
+
+<!--  ########################################################################################  -->
+
+<!--        Centros de Trabajo-->
+
+        <record id="work_center_oficinas" model="work.center">
+            <field name="name">OFICINAS</field>
+        </record>
+
+<!--        Areas de Trabajo-->
+
+        <record id="work_area_oficinas" model="work.area">
+            <field name="name">COMEDOR</field>
+            <field name="work_center_id" ref="work_center_oficinas"/>
+        </record>
+
+    </data>
+</odoo>

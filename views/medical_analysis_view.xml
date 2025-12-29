@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<odoo>
+    <record id="view_medical_analysis_form" model="ir.ui.view">
+        <field name="name">Medical Analysis Form</field>
+        <field name="model">medical.analysis</field>
+        <field name="arch" type="xml">
+            <form string="Análisis Médico">
+                <header>
+                    <button name="action_ready" string="Marcar Listo" type="object" class="oe_highlight" invisible="state != 'draft'"/>
+                    <button name="action_draft" string="Volver a Borrador" type="object" invisible="state != 'ready'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,ready"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="type_id" widget="selection" readonly="state == 'ready'"/>
+                            <field name="employee_id" readonly="state == 'ready'" options="{'no_create': True}"/>
+                            <field name="analysis_date" readonly="state == 'ready'"/>
+                        </group>
+                        <group>
+                            <field name="laboratory" readonly="state == 'ready'"/>
+                            <field name="laboratory_phone" readonly="state == 'ready'"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Resultados del Análisis">
+                            <field name="analysis_line_ids" readonly="state == 'ready'">
+                                <tree editable="bottom" create="False" delete="state != 'ready'">
+                                    <field name="parameter_id" readonly="1" force_save="1"/>
+                                    <field name="result_value" force_save="1"/>
+                                    <field name="unit_of_measure" readonly="1"/>
+                                    <field name="reference_range" readonly="1" force_save="0"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Anexos">
+                             <group>
+                                <field name="password" placeholder="Escribe la contraseña del archivo PDF (Si tiene)" readonly="state == 'ready'"/>
+                             </group>
+                            <group>
+                                <field name="analysis_file"
+                                       widget="pdf_viewer"
+                                       style="height: 600px; width: 75%; text-align: center;"
+                                       readonly="state == 'ready'"
+                                       invisible="state == 'draft'"
+                                />
+                                <field name="analysis_file"
+                                       widget="binary"
+                                       filename="file_name"
+                                       readonly="state == 'ready'"
+                                />
+                                <field name="file_name" invisible="1"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                   <field name="message_follower_ids" groups="base.group_user"/>
+                   <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_medical_analysis_search" model="ir.ui.view">
+        <field name="name">Security Attention Search</field>
+        <field name="model">medical.analysis</field>
+        <field name="arch" type="xml">
+            <search>
+<!--                <filter name="only_accidents" string="Solo Accidentes"-->
+<!--                        domain="[('type','=','accident')]"/>-->
+
+                <separator/>
+                <filter name="analysis_date" string="Fecha" date="analysis_date"/>
+                <separator/>
+
+                <group expand="1" string="Agrupar por">
+                    <filter name="group_by_type" string="Tipo de Analisis"
+                            context="{'group_by': 'type_id'}"/>
+                    <filter name="group_by_employee" string="Empleado"
+                            context="{'group_by': 'employee_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_medical_analysis_tree" model="ir.ui.view">
+        <field name="name">Medical Analysis Tree</field>
+        <field name="model">medical.analysis</field>
+        <field name="arch" type="xml">
+            <tree string="Análisis Médicos">
+                <field name="type_id"/>
+                <field name="employee_id" widget="many2one_avatar_user"/>
+                <field name="analysis_date"/>
+                <field name="state" widget="badge"
+                       decoration-info="state == 'draft'"
+                       decoration-success="state == 'ready'"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_medical_analysis" model="ir.actions.act_window">
+        <field name="name">Análisis Médicos</field>
+        <field name="res_model">medical.analysis</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>

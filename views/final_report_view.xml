@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<odoo>
+
+    <record id="action_report_final_situation" model="ir.actions.report">
+        <field name="name">Informe Final de Situación</field>
+        <field name="model">final.report</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">security_and_health.report_final_document</field>
+        <field name="report_file">security_and_health.report_final_document</field>
+        <field name="print_report_name">'Informe -%s' % (object.security_situation_id.name)</field>
+        <field name="binding_model_id" ref="model_final_report"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <record id="view_final_report_form" model="ir.ui.view">
+        <field name="name">Final Report Form</field>
+        <field name="model">final.report</field>
+        <field name="arch" type="xml">
+            <form string="Reporte Final" create="false">
+                <header>
+                    <button name="%(security_and_health.action_report_final_situation)d"
+                            string="Imprimir Informe" type="action" class="btn-primary" icon="fa-print"/>
+                </header>
+
+                <sheet>
+                    <group> <field name="security_situation_id" readonly="1"/> </group>
+                    <group>
+                        <group>
+                            <field name="investigator"/>
+                            <field name="medic_diagnostic"/>
+                            <field name="attention_type"/>
+                            <field name="given_days"/>
+                            <field name="work_risk"/>
+                            <field name="actual_laboral_state"/>
+<!--                            <field name="return_activities_date"/>-->
+                        </group>
+
+                        <group>
+                            <field name="supervisor_ssma" options="{'no_create': True}"/>
+                            <field name="medical_treatment"/>
+                            <field name="initial_attention"/>
+                            <field name="corrective_actions"/>
+                            <field name="lessons_learned"/>
+                        </group>
+                    </group>
+
+                    <div class="alert alert-warning" role="alert" invisible="given_days == '0'">
+                        <field name="return_date_warning"
+                               nolable="1"
+                               readonly="1"
+                        />
+                    </div>
+
+                    <group> <field name="final_summary"/> </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_final_report_tree" model="ir.ui.view">
+        <field name="name">Final Report Tree</field>
+        <field name="model">final.report</field>
+        <field name="arch" type="xml">
+            <tree string="Reportes Finales" create="false">
+                <field name="security_situation_id" decoration-bf="1"/>
+                <field name="final_report_employee_id" widget="many2one_avatar_user"/>
+                <field name="work_risk"/>
+                <field name="actual_laboral_state"/>
+                <field name="medic_diagnostic"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_final_report_search" model="ir.ui.view">
+        <field name="name">Security Attention Search</field>
+        <field name="model">final.report</field>
+        <field name="arch" type="xml">
+            <search>
+
+                <group expand="1" string="Agrupar por">
+                    <filter name="group_by_employee" string="Empleado"
+                            context="{'group_by': 'final_report_employee_id'}"/>
+
+                    <filter name="group_by_work_risk" string="Riesgo de trabajo"
+                            context="{'group_by': 'work_risk'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_final_report" model="ir.actions.act_window">
+        <field name="name">Reportes Finales</field>
+        <field name="res_model">final.report</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+</odoo>

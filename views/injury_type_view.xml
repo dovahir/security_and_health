@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<odoo>
+    <record id="view_injury_type_form" model="ir.ui.view">
+        <field name="name">Injury Type Form</field>
+        <field name="model">injury.type</field>
+        <field name="arch" type="xml">
+            <form string="Tipo de lesiones">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="description" placeholder="Describe el tipo de lesión (Opcional)"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_injury_type_tree" model="ir.ui.view">
+        <field name="name">Injury Type Tree</field>
+        <field name="model">injury.type</field>
+        <field name="arch" type="xml">
+            <tree string="Tipo de lesiones" editable="bottom" create="True">
+                <field name="name"/>
+                <field name="description"/>
+                <field name="create_date" string="Fecha de creación" readonly="1"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_injury_type" model="ir.actions.act_window">
+        <field name="name">Tipos de lesiones</field>
+        <field name="res_model">injury.type</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>

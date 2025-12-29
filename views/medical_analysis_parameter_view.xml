@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_medical_analysis_parameter_tree" model="ir.ui.view">
+        <field name="name">Medical Analysis Parameter Tree</field>
+        <field name="model">medical.analysis.parameter</field>
+        <field name="arch" type="xml">
+            <tree string="Parámetros de Análisis" editable="bottom">
+                <field name="name"/>
+                <field name="reference_range"/>
+                <field name="unit_of_measure"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_medical_analysis_parameter_form" model="ir.ui.view">
+        <field name="name">Medical Analysis Parameter Form</field>
+        <field name="model">medical.analysis.parameter</field>
+        <field name="arch" type="xml">
+            <form string="Parámetro de Análisis">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="unit_of_measure"/>
+                        <field name="reference_range"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_medical_analysis_parameter" model="ir.actions.act_window">
+        <field name="name">Parámetros de Análisis</field>
+        <field name="res_model">medical.analysis.parameter</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+</odoo>

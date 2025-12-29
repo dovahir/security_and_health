@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_security_attention_timeline" model="ir.ui.view">
+        <field name="name">Security Attention Timeline</field>
+        <field name="model">security.attention</field>
+        <field name="arch" type="xml">
+            <tree editable="bottom" string="Atenciones" create="false">
+                <field name="situation_id" readonly="1" decoration-bf="1"/>
+                <field name="situation_employee_id"
+                       readonly="1"
+                       string="Empleado Relacionado"
+                       widget="many2one_avatar_user"
+                />
+                <field name="date_time" readonly="1"/>
+                <field name="attention_type" readonly="1"/>
+                <field name="responsible_id" readonly="1"/>
+                <field name="action_taken" string="Detalle"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_security_attention_form" model="ir.ui.view">
+        <field name="name">Security Attention Form</field>
+        <field name="model">security.attention</field>
+        <field name="arch" type="xml">
+            <form string="Atención de Seguridad">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="situation_id" readonly="1"/>
+                            <field name="name"/>
+                            <field name="attention_type"/>
+                        </group>
+                        <group>
+                            <field name="date_time"/>
+                            <field name="responsible_id"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="action_taken" placeholder="Describe la acción tomada o el seguimiento..."/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_security_attention_search" model="ir.ui.view">
+        <field name="name">Security Attention Search</field>
+        <field name="model">security.attention</field>
+        <field name="arch" type="xml">
+            <search string="Buscar Atenciones">
+                <field name="attention_type"/>
+                <field name="responsible_id"/>
+
+<!--                <filter name="only_accidents" string="Solo Accidentes"-->
+<!--                        domain="[('type','=','accident')]"/>-->
+
+                <separator/>
+                <filter name="date_time" string="Fecha" date="date_time"/>
+                <separator/>
+
+                <group expand="1" string="Agrupar por">
+                    <filter name="group_by_situation_id" string="Situación"
+                            context="{'group_by': 'situation_id'}"/>
+                    <filter name="group_by_employee" string="Empleado involucrado"
+                            context="{'group_by': 'situation_employee_id'}"/>
+                    <filter name="group_by_attention_type" string="Tipo de Atención"
+                            context="{'group_by': 'attention_type'}"/>
+                    <filter name="group_by_responsable" string="Responsable"
+                            context="{'group_by': 'responsible_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_security_attention" model="ir.actions.act_window">
+        <field name="name">Atenciones de Seguridad</field>
+        <field name="res_model">security.attention</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+</odoo>

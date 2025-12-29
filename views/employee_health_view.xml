@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_employee_health_form" model="ir.ui.view">
+        <field name="name">Employee Health Form</field>
+        <field name="model">employee.health</field>
+        <field name="arch" type="xml">
+            <form string="Registro de Salud">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="employee_id"/>
+                            <field name="record_date"/>
+                            <field name="blood_type" required="1"/>
+                        </group>
+                        <group>
+                            <field name="height" string="Estatura (cm)"/>
+                            <field name="weight" string="Peso (kg)"/>
+                            <field name="imc" readonly="1"/>
+                        </group>
+                    </group>
+                    <field name="notes" placeholder="Notas médicas adicionales..."/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_employee_health_tree" model="ir.ui.view">
+        <field name="name">Employee Health Tree</field>
+        <field name="model">employee.health</field>
+        <field name="arch" type="xml">
+            <tree string="Registros de Salud">
+                <field name="employee_id"
+                       widget="many2one_avatar_user"/>
+                <field name="record_date"/>
+                <field name="height"/>
+                <field name="weight"/>
+                <field name="blood_type"/>
+                <field name="imc"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_employee_health_search" model="ir.ui.view">
+        <field name="name">Employee Health Search</field>
+        <field name="model">employee.health</field>
+        <field name="arch" type="xml">
+            <search>
+
+                <separator/>
+                <filter name="record_date" string="Fecha" date="record_date"/>
+                <separator/>
+
+                <group expand="1" string="Agrupar por">
+                    <filter name="group_by_employee" string="Empleado"
+                            context="{'group_by': 'employee_id'}"/>
+
+                    <filter name="group_by_blood_type" string="Tipo de Sangre"
+                            context="{'group_by': 'blood_type'}"/>
+<!--                    <filter name="group_by_responsable" string="Responsable"-->
+<!--                            context="{'group_by': 'responsible_id'}"/>-->
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_security_attention" model="ir.actions.act_window">
+        <field name="name">Atenciones de Seguridad</field>
+        <field name="res_model">security.attention</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="action_employee_health_record" model="ir.actions.act_window">
+        <field name="name">Registros de Salud</field>
+        <field name="res_model">employee.health</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+</odoo>
