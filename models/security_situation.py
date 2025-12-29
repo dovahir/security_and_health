@@ -115,24 +115,22 @@ class SecuritySituation(models.Model):
         string='Línea de tiempo de atenciones'
     )
 
-
+    # Cambia el estado a 'Activo' (Volver a Borrador) o Concluido
     def action_conclude(self):
-        """Cambia el estado a 'Concluido' """
         self.ensure_one()
         self.state = 'concluded'
 
     def action_draft(self):
-        # Cambia el estado a 'Activo' (Volver a Borrador)
         self.ensure_one()
         self.state = 'active'
 
+    # Limpia el campo de Área de Trabajo cuando cambia el centro de Trabajo
     @api.onchange('work_center_id')
     def _onchange_work_center_id(self):
-        # Limpia el campo de Área de Trabajo cuando cambia el centro de Trabajo
         # para forzar la selección centro del nuevo dominio.
-
         self.work_area_id = False
 
+    # Abrir vista Reporte Final
     def action_open_final_report(self):
         self.ensure_one()
         # Buscar un reporte final existente
@@ -144,7 +142,7 @@ class SecuritySituation(models.Model):
                 'security_situation_id': self.id,
             })
 
-        # Abrimos la vista del reporte final
+        # Abrimos la vista del reporte final mediante return
         return {
             'type': 'ir.actions.act_window',
             'res_model': 'final.report',
@@ -153,9 +151,9 @@ class SecuritySituation(models.Model):
             'target':'current',
         }
 
+    # No permite registrar una fecha y hora futura
     @api.constrains('event_date')
     def _check_event_date_not_future(self):
-        """ No permite registrar una fecha y hora futura """
         for record in self:
             if record.event_date and record.event_date > fields.Datetime.now():
                 raise UserError("No puedes registrar una fecha y hora futura para una Situación de Seguridad.")
@@ -203,11 +201,11 @@ class SecuritySituation(models.Model):
             if file_size3 > max_size3:
                 raise UserError(_("Evidencia 3 excede el tamaño permitido (5MB)"))
 
+    # Metodo usado para la secuencia de name (referencia)
     @api.model_create_multi
     def create(self, vals_list):
         for vals in vals_list:
             if vals.get('name', _('New')) == _('New'):
-                vals['name'] = (self.env['ir.sequence'].
-                                  next_by_code('security.situation'))
+                vals['name'] = (self.env['ir.sequence'].next_by_code('security.situation'))
         return super().create(vals_list)
 
