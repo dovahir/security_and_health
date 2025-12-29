@@ -94,11 +94,11 @@ class MedicalAnalysis(models.Model):
             file_size = len(file_bytes)
             max_size = 5 * 1024 * 1024 #5MB
             if file_size > max_size:
-                raise UserError(_("El archivo excede el tamaño máximo (5MB)"))
+                raise UserError(_("El archivo pdf excede el tamaño máximo (5MB)"))
 
             #Verifica que, aunque termine en .pdf, sea un pdf real
             if not file_bytes.startswith(b"%PDF"):
-                raise UserError(_("No valido"))
+                raise UserError(_("PDF no valido"))
 
     # Restriccion de fecha futura
     @api.constrains('analysis_date')
@@ -115,7 +115,7 @@ class MedicalAnalysis(models.Model):
                 continue
 
             if not num.laboratory_phone.isdigit():
-                raise UserError (_("Solo se admiten numeros"))
+                raise UserError (_("Solo se admiten números en el campo Contacto"))
             total = len(num.laboratory_phone)
             if total != 10:
-                raise UserError(_("No es un número valido"))
+                raise UserError(_("No es un número de contacto valido"))

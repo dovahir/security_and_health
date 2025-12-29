@@ -52,14 +52,16 @@ class SecuritySituation(models.Model):
         ondelete='set null', index=True,
         help="Empleado que atendió activamente la situación", tracking=True)
 
-    work_center_id = fields.Many2one('work.center',
-                                     string="Centro de Trabajo"
-                                     )
+    company_id = fields.Many2one('res.company',
+                                 required=True,
+                                 default=lambda self: self.env.company)
+
+    work_center_id = fields.Many2one('hr.work.location',
+                                     string="Centro de Trabajo")
 
     work_area_id = fields.Many2one('work.area',
                                    string="Área / Lugar exacto",
-                                   help="Debe seleccionar centro de trabajo",
-                                   )
+                                   help="Debe seleccionar centro de trabajo")
 
     event_severity = fields.Selection([
         ('minor', 'Menor'),

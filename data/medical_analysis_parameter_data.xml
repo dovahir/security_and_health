@@ -263,18 +263,18 @@
 
 <!--  ########################################################################################  -->
 
-<!--        Centros de Trabajo-->
+<!--&lt;!&ndash;        Centros de Trabajo&ndash;&gt;-->
 
-        <record id="work_center_oficinas" model="work.center">
-            <field name="name">OFICINAS</field>
-        </record>
+<!--        <record id="work_center_oficinas" model="work.center">-->
+<!--            <field name="name">OFICINAS</field>-->
+<!--        </record>-->
 
-<!--        Areas de Trabajo-->
+<!--&lt;!&ndash;        Areas de Trabajo&ndash;&gt;-->
 
-        <record id="work_area_oficinas" model="work.area">
-            <field name="name">COMEDOR</field>
-            <field name="work_center_id" ref="work_center_oficinas"/>
-        </record>
+<!--        <record id="work_area_oficinas" model="work.area">-->
+<!--            <field name="name">COMEDOR</field>-->
+<!--            <field name="work_center_id" ref="work_center_oficinas"/>-->
+<!--        </record>-->
 
     </data>
 </odoo>

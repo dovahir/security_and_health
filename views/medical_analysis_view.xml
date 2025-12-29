@@ -20,7 +20,10 @@
                         </group>
                         <group>
                             <field name="laboratory" readonly="state == 'ready'"/>
-                            <field name="laboratory_phone" readonly="state == 'ready'"/>
+                            <field name="laboratory_phone"
+                                   readonly="state == 'ready'"
+                                   help="Número telefónico a 10 dígitos del laboratorio"
+                                   placeholder="Ej. 9212352326"/>
                         </group>
                     </group>
 

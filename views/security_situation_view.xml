@@ -70,10 +70,19 @@
                             <field name="department_id"/>
                             <field name="parent_id"/>
                             <field name="follow" readonly="state == 'concluded'"/>
-                            <field name="work_center_id" required="1" options="{'no_create': True}" readonly="state == 'concluded'"/>
+                            <field name="company_id" readonly="state == 'concluded'"/>
+                            <field name="work_center_id"
+                                   required="1"
+                                   options="{'no_create': True}"
+                                   readonly="state == 'concluded'"
+                                   domain="[('company_id', '=', company_id)]"/>
                         </group>
                         <group>
-                            <field name="work_area_id" string="Área / Lugar exacto" readonly="state == 'concluded'" options=" {'no_create': True}" domain="[('work_center_id', '=', work_center_id)]"/>
+                            <field name="work_area_id"
+                                   string="Área / Lugar exacto"
+                                   readonly="state == 'concluded'"
+                                   options=" {'no_create': True}"
+                                   domain="[('location_id', '=', work_center_id)]"/>
                             <field name="event_severity" required="1" readonly="state == 'concluded'"/>
                             <field name="task_type" readonly="state == 'concluded'"/>
                             <field name="injury_type_id" invisible="type != 'accident'" required="type == 'accident'" readonly="state == 'concluded'"/>

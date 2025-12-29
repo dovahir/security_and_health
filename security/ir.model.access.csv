@@ -1,6 +1,5 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_security_situation_only_read,security_situation,model_security_situation,group_security_and_health_only_read,0,0,0,0
-access_work_center_only_read,work_center,model_work_center,group_security_and_health_only_read,1,0,0,0
 access_work_area_only_read,work_area,model_work_area,group_security_and_health_only_read,1,0,0,0
 access_injury_type_only_read,injury_type,model_injury_type,group_security_and_health_only_read,1,0,0,0
 access_final_report_only_read,final_report,model_final_report,group_security_and_health_only_read,1,0,0,0
@@ -14,7 +13,6 @@ access_medical_analysis_type_only_read,medical_analysis_type,model_medical_analy
 access_hr_employee_only_read,hr_employee,model_hr_employee,group_security_and_health_only_read,1,0,0,0
 
 access_security_situation_employee,security_situation,model_security_situation,group_security_and_health_employee,1,1,1,0
-access_work_center_employee,work_center,model_work_center,group_security_and_health_employee,1,1,1,0
 access_work_area_employee,work_area,model_work_area,group_security_and_health_employee,1,1,1,0
 access_injury_type_employee,injury_type,model_injury_type,group_security_and_health_employee,1,1,1,0
 access_final_report_employee,final_report,model_final_report,group_security_and_health_employee,1,1,1,0
@@ -28,7 +26,6 @@ access_medical_analysis_type_employee,medical_analysis_type,model_medical_analys
 access_hr_employee_employee,hr_employee,model_hr_employee,group_security_and_health_employee,1,1,1,0
 
 access_security_situation_manager,security_situation,model_security_situation,group_security_and_health_manager,1,1,1,1
-access_work_center_manager,work_center,model_work_center,group_security_and_health_manager,1,1,1,1
 access_work_area_manager,work_area,model_work_area,group_security_and_health_manager,1,1,1,1
 access_injury_type_manager,injury_type,model_injury_type,group_security_and_health_manager,1,1,1,1
 access_final_report_manager,final_report,model_final_report,group_security_and_health_manager,1,1,1,1
