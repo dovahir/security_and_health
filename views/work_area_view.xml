@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-    <record id="view_work_center_form" model="ir.ui.view">
-        <field name="name">Work Center Form</field>
+    <record id="view_work_area_form" model="ir.ui.view">
+        <field name="name">Work Area Form</field>
         <field name="model">work.area</field>
         <field name="arch" type="xml">
             <form string="Centro de Trabajo y Areas">
@@ -25,8 +25,8 @@
         </field>
     </record>
 
-    <record id="view_work_center_tree" model="ir.ui.view">
-        <field name="name">Work Center Tree</field>
+    <record id="view_work_area_tree" model="ir.ui.view">
+        <field name="name">Work Area Tree</field>
         <field name="model">work.area</field>
         <field name="arch" type="xml">
             <tree string="Centros de Trabajo">
@@ -36,7 +36,7 @@
         </field>
     </record>
 
-    <record id="action_work_center" model="ir.actions.act_window">
+    <record id="action_work_area" model="ir.actions.act_window">
         <field name="name">Centros y Areas de Trabajo</field>
         <field name="res_model">work.area</field>
         <field name="view_mode">tree,form</field>
