@@ -22,13 +22,14 @@ class FinalReport(models.Model):
     )
 
     # Campos a mostrar en el formulario
-    investigator = fields.Char(string="Investigador")
+    investigator = fields.Char(string="Supervisor de Obra")
     medic_diagnostic = fields.Char(string='Diagnóstico')
     attention_type = fields.Selection([
         ('na', 'N/A'),
         ('private','Privada'),
         ('public','Pública'),
-    ], string="Tipo de atención")
+    ], string="Tipo de atención médica")
+    attention_cost = fields.Char(string="Costo de atención médica privada")
     given_days = fields.Integer(string='Días de incapacidad', default='0')
     work_risk = fields.Selection([
         ('no_risk','No de trabajo'),

@@ -20,11 +20,12 @@ class SecuritySituation(models.Model):
         ('quasi_accident', 'Quasi Accidente'),
         ('lost_time_injury', 'Incidente con Pérdida de Tiempo'),
         ('medical_treatment', 'Requiere tratamiento médico'),
-        ('first_aid', 'Primeros Auxilios'),
         ('restricted_work_case', 'Caso de Trabajo Restringido'),
         ('non_work_related', 'No Relacionado con Act. Laborales'),
         ('near_misses_incident', 'Incidente "Near Misses"')
     ], string="Tipo de Situación", required=True, tracking=True)
+
+    rwc_days = fields.Integer(string="Días de Trabajo Restringido")
 
     cause = fields.Selection([
            ('unsafe act', 'Acto Inseguro'),
@@ -83,30 +84,32 @@ class SecuritySituation(models.Model):
         ('critic', 'Crítica')
     ], string="Severidad del Evento", required=True, tracking=True)
 
-    # task_type = fields.Selection([
-    #     ('hot_work', 'Trabajos en caliente'),
-    #     ('high_work', 'Trabajos en altura'),
-    #     ('confined_spaces', 'Espacios confinados'),
-    #     ('maneuvers', 'Maniobras'),
-    #     ('unknown', 'Desconocida'),
-    # ], string="Tipo de Actividad")
+    immediate_actions = fields.Selection([
+        ('first_aid', 'Primeros Auxilios'),
+        ('emergency_actions', 'Acciones de Emergencia'),
+        ('transfer_worker', 'Traslado del Trabajador'),
+        ('area_isolation', 'Aislamiento del Area'),
+        ('machine_lockout', 'Bloqueo de Máquina'),
+        ('internal_report', 'Reporte Interno')
+    ], string="Medidas Inmediatas", required=True, tracking=True)
+
 
     activities_type_id = fields.Many2one('activities.type',
                                        string="Tipo de Actividad",
                                        tracking=True)
 
     factor_type = fields.Selection([
-        ('by blow', 'Por golpe'),
-        ('by contact', 'Por contacto'),
-        ('by hitting against', 'Por pegar contra'),
-        ('by contact with', 'Por contacto con'),
-        ('by entrapment', 'Por atrapamiento'),
-        ('by catching', 'Por prendimiento'),
-        ('by imprisonment', 'Por aprisionamiento'),
-        ('by fall from height', 'Por caída a desnivel'),
-        ('by fall on level ground', 'Por caída a nivel'),
-        ('by overexertion', 'Por sobreesfuerzo'),
-        ('by exposure', 'Por exposición')
+        ('by_blow', 'Por golpe'),
+        ('by_contact', 'Por contacto'),
+        ('by_hitting against', 'Por pegar contra'),
+        ('by_contact with', 'Por contacto con'),
+        ('by_entrapment', 'Por atrapamiento'),
+        ('by_catching', 'Por prendimiento'),
+        ('by_imprisonment', 'Por aprisionamiento'),
+        ('by_fall from height', 'Por caída a desnivel'),
+        ('by_fall on level ground', 'Por caída a nivel'),
+        ('by_overexertion', 'Por sobreesfuerzo'),
+        ('by_exposure', 'Por exposición')
     ], string="Factor Tipo", required=True, tracking=True, help="Tipo de Accidente")
 
     injury_type_id = fields.Many2one('injury.type',
@@ -115,11 +118,31 @@ class SecuritySituation(models.Model):
                                      )
 
     injury_severity = fields.Selection([
-        ('first_aid','Primeros Auxilios'),
+        ('first_aid','Solo Primeros Auxilios'),
         ('disabling', 'Incapacitante'),
         ('hospitalization', 'Hospitalización'),
         ('fatal', 'Fatal'),
     ], string ="Severidad de la lesión", tracking=True)
+
+    injury_description = fields.Text(string="Descripción detallada de la lesión")
+
+    body_part = fields.Selection([
+        ('head', 'Cabeza'),
+        ('eyes', 'Ojos'),
+        ('nose', 'Naríz'),
+        ('mouth', 'Boca'),
+        ('ears', 'Orejas'),
+        ('neck', 'Cuello'),
+        ('shoulders', 'Hombros'),
+        ('arms', 'Brazos'),
+        ('hands', 'Manos'),
+        ('back', 'Espalda'),
+        ('hip', 'Cadera'),
+        ('legs', 'Piernas'),
+        ('knee', 'Rodilla'),
+        ('ankle', 'Tobillo'),
+        ('foot', 'Pies')
+    ], string="Parte del Cuerpo Afectada", required=True, tracking=True, help="Parte del cuerpo que fue herida/lesionada")
 
     witnesses = fields.Many2many(
         comodel_name='hr.employee',
@@ -129,10 +152,13 @@ class SecuritySituation(models.Model):
     )
 
     # Notebook Detalles y evidencias
-    # details = fields.Text(string='Detalles', required=True, tracking=True, help="Describe la situación")
     details_whats = fields.Text(string="Qué pasó")
     details_how = fields.Text(string="Cómo pasó")
-    details_when = fields.Text(string="Cuándo pasó")
+    details_when = fields.Text(string="Cuándo pasó", help="Secuencia Cronológica del Suceso")
+
+    details_materials = fields.Text(string="Materiales y Equipo", help="Describir si existió Herramientas, maquinaria implicada y su estado.")
+    details_enviroment = fields.Text(string="Entorno", help="Describir las condiciones de iluminación, suelo, ruido, ventilación, entre otros.")
+    details_human_factors = fields.Text(string="Factores Humanos", help="Ojos no en la tarea, mente no en la tarea, falta de señalización, entre otros.")
 
     evidence_photo_1 = fields.Image(string="Foto de evidencia 1", max_width=1024, max_height=1024)
     evidence_photo_2 = fields.Image(string="Foto de evidencia 2", max_width=1024, max_height=1024)

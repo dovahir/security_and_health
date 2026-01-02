@@ -30,6 +30,7 @@
                             <field name="investigator"/>
                             <field name="medic_diagnostic"/>
                             <field name="attention_type"/>
+                            <field name="attention_cost" invisible="attention_type != 'private'"/>
                             <field name="given_days"/>
                             <field name="work_risk"/>
                             <field name="actual_laboral_state"/>

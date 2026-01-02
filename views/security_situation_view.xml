@@ -61,6 +61,7 @@
                                 context="{'time_format': 'HH:mm'}"
                                 readonly="state == 'concluded'"/>
                             <field name="type" required="1" readonly="state == 'concluded'"/>
+                            <field name="rwc_days" required="type == 'restricted_work_case'" invisible="type != 'restricted_work_case'" readonly="state == 'concluded'"/>
                             <field name="cause" required="1" readonly="state == 'concluded'"/>
                             <field name="employee_id"
                                    options="{'no_create': True}"
@@ -85,20 +86,30 @@
                                    options=" {'no_create': True}"
                                    domain="[('location_id', '=', work_center_id)]"/>
                             <field name="event_severity" required="1" readonly="state == 'concluded'"/>
+                            <field name="immediate_actions" required="1" readonly="state == 'concluded'"/>
                             <field name="injury_type_id" readonly="state == 'concluded'"/>
+                            <field name="body_part" readonly="state == 'concluded'"/>
                             <field name="injury_severity" readonly="state == 'concluded'"/>
+                            <field name="injury_description" readonly="state == 'concluded'"/>
                             <field name="witnesses" widget="many2many_tags" readonly="state == 'concluded'" options="{'no_open': False, 'no_create': True}"/>
                             <field name="activities_type_id" readonly="state == 'concluded'"/>
-                            <field name="factor_type"/>
+                            <field name="factor_type" readonly="state == 'concluded'"/>
                         </group>
                     </group>
 
                     <notebook>
                         <page string="Detalles y Evidencias">
-                            <group string="Descripción del Suceso">
-                                <field name="details_whats" required="1" readonly="state == 'concluded'"/>
-                                <field name="details_how" required="1" readonly="state == 'concluded'"/>
-                                <field name="details_when" required="1" readonly="state == 'concluded'"/>
+                            <group>
+                                <group string="Descripción del Suceso">
+                                    <field name="details_whats" required="1" readonly="state == 'concluded'"/>
+                                    <field name="details_how" required="1" readonly="state == 'concluded'"/>
+                                    <field name="details_when" required="1" readonly="state == 'concluded'"/>
+                                </group>
+                                <group string="Otros Detalles">
+                                    <field name="details_materials" required="1" readonly="state == 'concluded'"/>
+                                    <field name="details_enviroment" required="1" readonly="state == 'concluded'"/>
+                                    <field name="details_human_factors" required="1" readonly="state == 'concluded'"/>
+                                </group>
                             </group>
                             <group string="Evidencias Fotográficas" name="group_evidence">
                                 <table>
