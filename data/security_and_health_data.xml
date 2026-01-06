@@ -261,6 +261,41 @@
             <field name="description">Una fractura es un hueso roto.</field>
         </record>
 
+        <record id="injury_sprain" model="injury.type">
+            <field name="name">Esguince</field>
+            <field name="description">Un esguince es una lesión de los ligamentos.</field>
+        </record>
+
+        <record id="injury_dislocation" model="injury.type">
+            <field name="name">Luxación</field>
+            <field name="description">Una luxación es la separación permanente de las dos partes de una articulación.</field>
+        </record>
+
+        <record id="injury_contusion" model="injury.type">
+            <field name="name">Contusión</field>
+            <field name="description">Una contusión es una lesión física de tejido causada por un traumatismo contundente.</field>
+        </record>
+
+        <record id="injury_laceration" model="injury.type">
+            <field name="name">Laceración</field>
+            <field name="description">Una laceración es una herida irregular o desgarrada en la piel causada por un trauma contundente o por un objeto afilado.</field>
+        </record>
+
+        <record id="injury_burn" model="injury.type">
+            <field name="name">Quemadura</field>
+            <field name="description">Una quemadura es una lesión en la piel o en otros tejidos orgánicos causada principalmente por el calor, pero también por radiación, radiactividad, electricidad, fricción o contacto con sustancias químicas.</field>
+        </record>
+
+        <record id="injury_amputation" model="injury.type">
+            <field name="name">Amputación</field>
+            <field name="description">La amputación es el corte y separación de una extremidad del cuerpo mediante traumatismo.</field>
+        </record>
+
+        <record id="injury_low_back_pain" model="injury.type">
+            <field name="name">Lumbalgia</field>
+            <field name="description">La lumbalgia es el dolor localizado en la parte baja de la espalda, correspondiente a la zona lumbar de la columna vertebral.</field>
+        </record>
+
 <!--  ########################################################################################  -->
 
 <!--&lt;!&ndash;        Centros de Trabajo&ndash;&gt;-->

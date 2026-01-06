@@ -38,6 +38,8 @@ class SecuritySituation(models.Model):
         ondelete='set null', index=True,
         help="Empleado involucrado (opcional).", tracking=True)
 
+    employee_picture = fields.Image(related='employee_id.image_1920', string='', readonly=True)
+
     job_id = fields.Many2one(comodel_name='hr.job',
                              related='employee_id.job_id',
                              string="Puesto de trabajo",
@@ -110,7 +112,7 @@ class SecuritySituation(models.Model):
         ('by_fall on level ground', 'Por caída a nivel'),
         ('by_overexertion', 'Por sobreesfuerzo'),
         ('by_exposure', 'Por exposición')
-    ], string="Factor Tipo", required=True, tracking=True, help="Tipo de Accidente")
+    ], string="Factor Tipo", tracking=True, help="Tipo de Accidente")
 
     injury_type_id = fields.Many2one('injury.type',
                                      string="Tipo de lesión",

@@ -5,20 +5,17 @@
         <field name="model">security.situation</field>
         <field name="arch" type="xml">
             <tree string="Situación de Seguridad" expand="1">
-                <field name="name" readonly="1"
-                       decoration-bf="1"
-                />
+                <field name="name" readonly="1" decoration-bf="1"/>
                 <field name="type"/>
                 <field name="event_date" context="{'time_format': 'HH:mm'}"/>
-                <field name="employee_id"
-                       widget="many2one_avatar_user"/>
-                <field name="follow"/>
+                <field name="employee_id" widget="many2one_avatar_user"/>
                 <field name="work_center_id"/>
                 <field name="work_area_id"/>
                 <field name="event_severity"/>
                 <field name="state" widget="badge"
                        decoration-info="state == 'active'"
-                       decoration-success="state == 'concluded'"/>
+                       decoration-success="state == 'concluded'"
+                />
             </tree>
         </field>
     </record>
@@ -50,34 +47,39 @@
                             <field name="create_date" string="Fecha de creación" readonly="1"/>
                         </group>
                     </div>
-                        <group string="Info. del Empleado">
+                    <group string="Info. del Empleado">
+                        <group>
                             <field name="employee_id" options="{'no_create': True}" readonly="state == 'concluded'" required="type == 'accident'"/>
                             <field name="job_id"/>
                             <field name="department_id"/>
-                            <field name="parent_id"/>
+                            <field name="parent_id" widget="many2one_avatar_user"/>
                         </group>
+                        <group>
+                            <field name="employee_picture" widget="image" class="oe_avatar" options="{&quot;preview_image&quot;: &quot;employee_picture&quot;}"/>
+                        </group>
+                    </group>
                     <group>
                         <group string="Info. de la Situación">
                             <field name="event_date" string="Fecha del evento" required="1" widget="datetime" context="{'time_format': 'HH:mm'}" readonly="state == 'concluded'"/>
                             <field name="company_id" readonly="state == 'concluded'"/>
                             <field name="work_center_id" required="1" options="{'no_create': True}" readonly="state == 'concluded'" domain="[('company_id', '=', company_id)]"/>
-                            <field name="work_area_id" string="Área / Lugar exacto" readonly="state == 'concluded'" options=" {'no_create': True}" domain="[('location_id', '=', work_center_id)]"/>
+                            <field name="work_area_id" string="Área / Lugar exacto" readonly="state == 'concluded'" domain="[('location_id', '=', work_center_id)]"/>
                             <field name="type" required="1" readonly="state == 'concluded'"/>
                             <field name="rwc_days" required="type == 'restricted_work_case'" invisible="type != 'restricted_work_case'" readonly="state == 'concluded'"/>
                             <field name="activities_type_id" readonly="state == 'concluded'"/>
                             <field name="event_severity" required="1" readonly="state == 'concluded'"/>
                             <field name="cause" required="1" readonly="state == 'concluded'"/>
                             <field name="immediate_actions" required="1" readonly="state == 'concluded'"/>
-                            <field name="follow" readonly="state == 'concluded'"/>
+                            <field name="follow" readonly="state == 'concluded'" widget="many2one_avatar_user"/>
                             <field name="witnesses" widget="many2many_tags" readonly="state == 'concluded'" options="{'no_open': False, 'no_create': True}"/>
                         </group>
                         <group string="Info. de Lesiones">
                             <field name="is_injuried" readonly="state == 'concluded'" widget="radio" options="{'horizontal': true}"/>
-                            <field name="factor_type" readonly="state == 'concluded'" invisible="is_injuried != 'yes'"/>
-                            <field name="injury_type_id" readonly="state == 'concluded'" invisible="is_injuried != 'yes'"/>
-                            <field name="injury_severity" readonly="state == 'concluded'" invisible="is_injuried != 'yes'"/>
-                            <field name="injured_body_part" widget="many2many_checkboxes" readonly="state == 'concluded'" invisible="is_injuried != 'yes'"/>
-                            <field name="injury_description" readonly="state == 'concluded'" invisible="is_injuried != 'yes'"/>
+                            <field name="factor_type" readonly="state == 'concluded'" invisible="is_injuried != 'yes'" required="is_injuried == 'yes'"/>
+                            <field name="injury_type_id" readonly="state == 'concluded'" invisible="is_injuried != 'yes'" required="is_injuried == 'yes'"/>
+                            <field name="injury_severity" readonly="state == 'concluded'" invisible="is_injuried != 'yes'" required="is_injuried == 'yes'"/>
+                            <field name="injured_body_part" widget="many2many_checkboxes" readonly="state == 'concluded'" invisible="is_injuried != 'yes'" required="is_injuried == 'yes'"/>
+                            <field name="injury_description" readonly="state == 'concluded'" invisible="is_injuried != 'yes'" required="is_injuried == 'yes'"/>
                         </group>
                     </group>
 
@@ -99,17 +101,17 @@
                                 <table>
                                     <tr>
                                         <td style="padding: 50px; text-align: center;">
-                                            <field name="evidence_photo_1" widget="image" style="max-width: 200px;" readonly="state == 'concluded'"/>
+                                            <field name="evidence_photo_1" widget="image" style="min-width: 325px;" readonly="state == 'concluded'"/>
                                             <br/>
                                             <span>Evidencia 1</span>
                                         </td>
                                         <td style="padding: 50px; text-align: center;">
-                                            <field name="evidence_photo_2" widget="image" style="max-width: 200px;" readonly="state == 'concluded'"/>
+                                            <field name="evidence_photo_2" widget="image" style="min-width: 325px;" readonly="state == 'concluded'"/>
                                             <br/>
                                             <span>Evidencia 2</span>
                                         </td>
                                         <td style="padding: 50px; text-align: center;">
-                                            <field name="evidence_photo_3" widget="image" style="max-width: 200px;" readonly="state == 'concluded'"/>
+                                            <field name="evidence_photo_3" widget="image" style="min-width: 325px;" readonly="state == 'concluded'"/>
                                             <br/>
                                             <span>Evidencia 3</span>
                                         </td>
