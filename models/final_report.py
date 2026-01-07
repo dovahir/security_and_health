@@ -23,21 +23,6 @@ class FinalReport(models.Model):
     )
 
     # Campos a mostrar en el formulario
-    attention_type = fields.Selection([
-        ('na', 'N/A'),
-        ('private', 'Privada'),
-        ('public', 'Pública'),
-    ], string="Tipo de atención médica", tracking=True)
-    attention_cost = fields.Char(string="Costo de atención médica privada", tracking=True)
-    given_days = fields.Integer(string='Días de incapacidad', default='0', tracking=True)
-    actual_laboral_state = fields.Selection([
-        ('normal', 'Actividades normales'),
-        ('not_normal', 'Actividades parciales'),
-        ('out', 'Actividades nulas'),
-    ], string="Estado laboral actual", tracking=True)
-    return_activities_date = fields.Date(string="Fecha de regreso a actividades normales",
-                                         compute='_compute_return_activities_date',
-                                         help="Basado en la fecha de creación de la situacion y los dias de incapacidad del empleado")
     corrective_actions = fields.Text(string="Acciones Correctivas", tracking=True)
     lessons_learned = fields.Text(string="Lecciones Aprendidas", tracking=True)
     final_summary = fields.Text(string="Comentarios Finales", tracking=True)
@@ -47,50 +32,3 @@ class FinalReport(models.Model):
         compute="_compute_return_date_warning"
     )
 
-    @api.depends('return_activities_date')
-    def _compute_return_date_warning(self):
-        today = date.today()
-        seven_days_later = today + timedelta(days=7)
-
-        for record in self:
-            warning = False
-            return_date = record.return_activities_date
-
-            if not return_date:
-                record.return_date_warning = False
-                continue
-            if return_date == today:
-                warning = "¡ATENCIÓN! El empleado debería estar actualmente en labores."
-            elif today < return_date <= seven_days_later:
-                remaining_days = (return_date - today).days
-                warning = f"AVISO: El empleado regresa en {remaining_days} días ({return_date.strftime('%d-%m-%Y')})."
-            elif return_date < today:
-                warning = "NOTA: La fecha de regreso ya pasó. Verifique el estado laboral."
-            else:  # Fecha lejana
-                warning = f"La fecha de regreso está programada para {return_date.strftime('%d-%m-%Y')}."
-
-            record.return_date_warning = warning
-
-    @api.constrains('given_days', 'return_activities_date')
-    def _checkr_return_activities_date(self):
-        for record in self:
-            if record.return_activities_date < fields.Date.today():
-                raise UserError("No puedes registrar una fecha pasada.")
-
-            if record.given_days < 0:
-                raise UserError(_("Revisar valor de días"))
-
-    @api.depends('return_activities_date', 'given_days', 'security_situation_id.event_date')
-    def _compute_return_activities_date(self):
-        for date in self:
-            init_date = date.security_situation_id.event_date
-            incapacity_days = datetime.timedelta(days=date.given_days)
-            newDate = init_date + incapacity_days
-
-            date.return_activities_date = newDate
-
-    @api.constrains('given_days')
-    def _check_given_days(self):
-        for record in self:
-            if record.given_days < 0:
-                raise UserError(_("Revisar días de incapacidad (No puede ser negativo)"))

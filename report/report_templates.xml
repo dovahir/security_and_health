@@ -30,6 +30,19 @@
                                     <tbody></tbody>
                                 </table>
 
+                                <table class="table table-sm table-borderless" style="width: 100%;">
+                                    <thead>
+                                        <tr>
+                                            <td><strong>Estado Laboral: </strong><span t-field="doc.actual_laboral_state"/></td>
+                                            <t t-if="doc.actual_laboral_state != 'normal'">
+                                                <td><strong>Días de incapacidad: </strong><span t-field="doc.given_days"/></td>
+                                            </t>
+                                            <td><strong>Tipo de atención médica: </strong><span t-field="doc.attention_type"/></td>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+
                                 <hr/>
                             </t>
 
@@ -61,6 +74,7 @@
                                 </tr>
                                 </t>
                             </table>
+
                             <p>
                                 <strong>Descripción del Evento:</strong><br></br>
                                 <span t-field="doc.security_situation_id.details_whats"/>

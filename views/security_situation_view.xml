@@ -47,24 +47,13 @@
                             <field name="create_date" string="Fecha de creación" readonly="1"/>
                         </group>
                     </div>
-                    <group string="Info. del Empleado">
-                        <group>
-                            <field name="employee_id" options="{'no_create': True}" readonly="state == 'concluded'" required="type == 'accident'"/>
-                            <field name="job_id"/>
-                            <field name="department_id"/>
-                            <field name="parent_id" widget="many2one_avatar_user"/>
-                        </group>
-                        <group>
-                            <field name="employee_picture" widget="image" class="oe_avatar" options="{&quot;preview_image&quot;: &quot;employee_picture&quot;}"/>
-                        </group>
-                    </group>
                     <group>
                         <group string="Info. de la Situación">
                             <field name="event_date" string="Fecha del evento" required="1" widget="datetime" context="{'time_format': 'HH:mm'}" readonly="state == 'concluded'"/>
+                            <field name="type" required="1" readonly="state == 'concluded'"/>
                             <field name="company_id" readonly="state == 'concluded'"/>
                             <field name="work_center_id" required="1" options="{'no_create': True}" readonly="state == 'concluded'" domain="[('company_id', '=', company_id)]"/>
                             <field name="work_area_id" string="Área / Lugar exacto" readonly="state == 'concluded'" domain="[('location_id', '=', work_center_id)]"/>
-                            <field name="type" required="1" readonly="state == 'concluded'"/>
                             <field name="rwc_days" required="type == 'restricted_work_case'" invisible="type != 'restricted_work_case'" readonly="state == 'concluded'"/>
                             <field name="activities_type_id" readonly="state == 'concluded'"/>
                             <field name="event_severity" required="1" readonly="state == 'concluded'"/>
@@ -76,6 +65,24 @@
                         <group string="Responsables">
                             <field name="supervisor_ssma" options="{'no_create': True}" required="1" widget="many2one_avatar_user" readonly="state == 'concluded'"/>
                             <field name="construction_supervisor" readonly="state == 'concluded'"/>
+                        </group>
+                    </group>
+                    <group string="Info. del Empleado">
+                        <group>
+                            <group>
+                                <field name="employee_id" options="{'no_create': True}" readonly="state == 'concluded'" required="type == 'accident'"/>
+                                <field name="job_id" invisible="not employee_id"/>
+                                <field name="department_id" invisible="not employee_id"/>
+                                <field name="parent_id" widget="many2one_avatar_user" invisible="not employee_id"/>
+                            </group>
+                            <group>
+                                <field name="employee_picture" widget="image" class="oe_avatar" options="{'preview_image': 'employee_picture'}" invisible="not employee_id"/>
+                            </group>
+                        </group>
+                        <group>
+                            <field name="actual_laboral_state" invisible="not employee_id"/>
+                            <field name="given_days" invisible="not employee_id or actual_laboral_state == 'normal' or not actual_laboral_state"/>
+                            <field name="attention_type" invisible="not employee_id"/>
                         </group>
                     </group>
                     <group>

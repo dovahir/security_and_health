@@ -1,6 +1,8 @@
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError
 import base64
+import datetime
+from datetime import date, timedelta
 
 class SecuritySituation(models.Model):
     _name = 'security.situation'
@@ -153,9 +155,9 @@ class SecuritySituation(models.Model):
     details_enviroment = fields.Text(string="Entorno")
     details_human_factors = fields.Text(string="Factores Humanos")
 
-    evidence_photo_1 = fields.Image(string="Foto de evidencia 1", max_width=1024, max_height=1024)
-    evidence_photo_2 = fields.Image(string="Foto de evidencia 2", max_width=1024, max_height=1024)
-    evidence_photo_3 = fields.Image(string="Foto de evidencia 3", max_width=1024, max_height=1024)
+    evidence_photo_1 = fields.Image(string="Foto de evidencia 1", max_width=1280, max_height=720)
+    evidence_photo_2 = fields.Image(string="Foto de evidencia 2", max_width=1280, max_height=720)
+    evidence_photo_3 = fields.Image(string="Foto de evidencia 3", max_width=1280, max_height=720)
 
     state = fields.Selection([
         ('active', 'Activo'),
@@ -179,6 +181,22 @@ class SecuritySituation(models.Model):
     construction_supervisor = fields.Char(string="Supervisor de Obra")
     # ---------------------------------------------------------------------------------------
     is_initial_attention = fields.Boolean(string="¿Hubo atención medica inicial?")
+
+    actual_laboral_state = fields.Selection([
+        ('normal', 'Actividades normales'),
+        ('not_normal', 'Actividades parciales'),
+        ('out', 'Actividades nulas'),
+    ], string="Estado laboral actual", tracking=True)
+    given_days = fields.Integer(string='Días de incapacidad', default='0', tracking=True)
+    return_activities_date = fields.Date(string="Fecha de regreso a actividades normales",
+                                         compute='_compute_return_activities_date',
+                                         help="Basado en la fecha de creación de la situacion y los dias de incapacidad del empleado")
+    attention_type = fields.Selection([
+        ('na', 'N/A'),
+        ('private', 'Privada'),
+        ('public', 'Pública'),
+    ], string="Tipo de atención médica", tracking=True)
+    attention_cost = fields.Char(string="Costo de atención médica privada", tracking=True)
 
     # Cambia el estado a 'Activo' (Volver a Borrador) o Concluido
     def action_conclude(self):
@@ -274,3 +292,50 @@ class SecuritySituation(models.Model):
                 vals['name'] = (self.env['ir.sequence'].next_by_code('security.situation'))
         return super().create(vals_list)
 
+    @api.depends('return_activities_date')
+    def _compute_return_date_warning(self):
+        today = date.today()
+        seven_days_later = today + timedelta(days=7)
+
+        for record in self:
+            warning = False
+            return_date = record.return_activities_date
+
+            if not return_date:
+                record.return_date_warning = False
+                continue
+            if return_date == today:
+                warning = "¡ATENCIÓN! El empleado debería estar actualmente en labores."
+            elif today < return_date <= seven_days_later:
+                remaining_days = (return_date - today).days
+                warning = f"AVISO: El empleado regresa en {remaining_days} días ({return_date.strftime('%d-%m-%Y')})."
+            elif return_date < today:
+                warning = "NOTA: La fecha de regreso ya pasó. Verifique el estado laboral."
+            else:  # Fecha lejana
+                warning = f"La fecha de regreso está programada para {return_date.strftime('%d-%m-%Y')}."
+
+            record.return_date_warning = warning
+
+    @api.constrains('given_days', 'return_activities_date')
+    def _checkr_return_activities_date(self):
+        for record in self:
+            if record.return_activities_date < fields.Date.today():
+                raise UserError("No puedes registrar una fecha pasada.")
+
+            if record.given_days < 0:
+                raise UserError(_("Revisar valor de días"))
+
+    @api.depends('return_activities_date', 'given_days', 'event_date')
+    def _compute_return_activities_date(self):
+        for date in self:
+            init_date = date.security_situation_id.event_date
+            incapacity_days = datetime.timedelta(days=date.given_days)
+            newDate = init_date + incapacity_days
+
+            date.return_activities_date = newDate
+
+    @api.constrains('given_days')
+    def _check_given_days(self):
+        for record in self:
+            if record.given_days < 0:
+                raise UserError(_("Revisar días de incapacidad (No puede ser negativo)"))
