@@ -38,7 +38,7 @@ class SecuritySituation(models.Model):
     employee_id = fields.Many2one(  #Opcional
         'hr.employee', string="Empleado",
         ondelete='set null', index=True,
-        help="Empleado involucrado (opcional).", tracking=True)
+        help="Empleado involucrado (opcional). Al seleccionar, se despliegan más campos", tracking=True)
 
     employee_picture = fields.Image(related='employee_id.image_1920', string='', readonly=True)
 
@@ -136,7 +136,7 @@ class SecuritySituation(models.Model):
     is_injuried = fields.Selection([
            ('yes', 'Sí'),
            ('no', 'No')
-      ], string='¿Resultó Herido?', default='no')
+      ], string='¿Resultó Herido?', default='no', help='Al seleccionar "Sí", se abrirán otros campos')
 
 
     witnesses = fields.Many2many(
@@ -201,7 +201,7 @@ class SecuritySituation(models.Model):
         ('private', 'Privada'),
         ('public', 'Pública'),
     ], string="Tipo de atención médica", tracking=True)
-    attention_cost = fields.Char(string="Costo de atención médica privada", tracking=True)
+    attention_cost = fields.Char(string="Costo de Atención Médica Privada", tracking=True)
 
     # Cambia el estado a 'Activo' (Volver a Borrador) o Concluido
     def action_conclude(self):

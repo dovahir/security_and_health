@@ -71,7 +71,7 @@
                     <group string="Info. del Empleado">
                         <group>
                             <group>
-                                <field name="employee_id" options="{'no_create': True}" readonly="state == 'concluded'" required="type == 'accident'"/>
+                                <field name="employee_id" options="{'no_create': True}" readonly="state == 'concluded'" required="is_injuried == 'yes'"/>
                                 <field name="job_id" invisible="not employee_id"/>
                                 <field name="department_id" invisible="not employee_id"/>
                                 <field name="parent_id" widget="many2one_avatar_user" invisible="not employee_id"/>
@@ -81,9 +81,12 @@
                             </group>
                         </group>
                         <group>
-                            <field name="actual_laboral_state" invisible="not employee_id"/>
-                            <field name="given_days" invisible="not employee_id or actual_laboral_state == 'normal' or not actual_laboral_state"/>
-                            <field name="attention_type" invisible="not employee_id"/>
+                            <field name="actual_laboral_state" invisible="not employee_id or is_injuried == 'no'"/>
+                            <field name="given_days"
+                                   invisible="(not employee_id or actual_laboral_state == 'normal' or not actual_laboral_state) or is_injuried == 'no'"/>
+                            <field name="attention_type"
+                                   invisible="(not employee_id or actual_laboral_state == 'normal' or not actual_laboral_state) or is_injuried == 'no'"/>
+                            <field name="attention_cost" invisible="not employee_id or attention_type != 'private' or actual_laboral_state == 'normal' or is_injuried == 'no'" help="Costo en pesos Mexicanos"/>
                         </group>
                     </group>
                     <group>
