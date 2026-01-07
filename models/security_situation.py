@@ -178,6 +178,11 @@ class SecuritySituation(models.Model):
                                       tracking=True,
                                       default=lambda self: self.env.user.employee_id,
                                       required=True)
+    is_construction = fields.Selection([
+           ('yes', 'Sí'),
+           ('no', 'No')
+      ], string='¿Existe Responsable de Obra?', default='no')
+
     construction_supervisor = fields.Char(string="Supervisor de Obra")
     # ---------------------------------------------------------------------------------------
     is_initial_attention = fields.Boolean(string="¿Hubo atención medica inicial?")
@@ -328,7 +333,7 @@ class SecuritySituation(models.Model):
     @api.depends('return_activities_date', 'given_days', 'event_date')
     def _compute_return_activities_date(self):
         for date in self:
-            init_date = date.security_situation_id.event_date
+            init_date = date.event_date
             incapacity_days = datetime.timedelta(days=date.given_days)
             newDate = init_date + incapacity_days
 

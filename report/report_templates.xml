@@ -7,72 +7,44 @@
                     <t t-call="web.external_layout">
                         <div class="page">
 
-                            <h3>Informe de Situación de Seguridad: <span t-field="doc.security_situation_id.name"/></h3>
+                            <h3>Situación de Seguridad: <span t-field="doc.security_situation_id.name"/></h3>
                             <p><strong>Fecha de Reporte:</strong> <span t-field="doc.create_date" t-options='{"widget": "date"}'/></p>
                             <p><strong>Supervisor SSMA:</strong> <span t-field="doc.security_situation_id.supervisor_ssma"/></p>
 
-                            <hr/>
-                            <t t-if="doc.security_situation_id.employee_id">
-
-                                <h4>Info. de Empleado</h4>
-
-                                <table class="table table-sm table-borderless" style="width: 100%;">
-                                    <thead>
-                                         <tr>
-                                            <td><strong>Empleado Involucrado: </strong><span t-field="doc.security_situation_id.employee_id.name"/></td>
-                                            <td><strong>Puesto al que pertenece: </strong><span t-field="doc.security_situation_id.job_id"/></td>
-                                        </tr>
-                                        <tr>
-                                            <td><strong>Departamento al que pertenece: </strong><span t-field="doc.security_situation_id.department_id"/></td>
-                                            <td><strong>Líder directo a cargo del empleado: </strong><span t-field="doc.security_situation_id.parent_id"/></td>
-                                        </tr>
-                                    </thead>
-                                    <tbody></tbody>
-                                </table>
-
-                                <table class="table table-sm table-borderless" style="width: 100%;">
-                                    <thead>
-                                        <tr>
-                                            <td><strong>Estado Laboral: </strong><span t-field="doc.actual_laboral_state"/></td>
-                                            <t t-if="doc.actual_laboral_state != 'normal'">
-                                                <td><strong>Días de incapacidad: </strong><span t-field="doc.given_days"/></td>
-                                            </t>
-                                            <td><strong>Tipo de atención médica: </strong><span t-field="doc.attention_type"/></td>
-                                        </tr>
-                                    </thead>
-                                    <tbody></tbody>
-                                </table>
-
-                                <hr/>
-                            </t>
-
                             <h4>Detalles del Evento</h4>
-
                             <p>
                                 <strong>Fecha y Hora del Evento: </strong><span t-field="doc.security_situation_id.event_date" t-options='{"widget": "datetime"}'/>
                             </p>
+
                             <table class="table table-sm table-borderless" style="width: 100%;">
-                                <tr>
-                                    <td><strong>Tipo de tarea: </strong><span t-field="doc.security_situation_id.activities_type_id"/></td>
-                                    <td><strong>Ubicación de Trabajo:</strong><span t-field="doc.security_situation_id.work_center_id.name"/></td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Tipo de situación: </strong><span t-field="doc.security_situation_id.type"/></td>
-                                    <td><strong>Área / Lugar Exacto:</strong><span t-field="doc.security_situation_id.work_area_id.name"/></td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Severidad: </strong><span t-field="doc.security_situation_id.event_severity"/></td>
-                                </tr>
-                                <t t-if="doc.security_situation_id.type == 'accident'">
-                                <tr>
-                                    <td><strong>Tipo de Lesión:</strong><span t-field="doc.security_situation_id.injury_type_id.name"/></td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Severidad de la Lesión:</strong><span t-field="doc.security_situation_id.injury_severity"/></td>
-                                    <td></td>
-                                </tr>
-                                </t>
+                                <thead>
+                                    <tr>
+                                        <td><strong>Tipo de Situación: </strong><span t-field="doc.security_situation_id.type"/></td>
+                                        <td><strong>Empresa: </strong><span t-field="doc.security_situation_id.company_id"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Días de Trabajo Restringido: </strong><span t-field="doc.security_situation_id.rwc_days"/></td>
+                                        <td><strong>Ubicación de Trabajo:</strong><span t-field="doc.security_situation_id.work_center_id.name"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Tipo de Actividad: </strong><span t-field="doc.security_situation_id.activities_type_id"/></td>
+                                        <td><strong>Área/Lugar Exacto:</strong><span t-field="doc.security_situation_id.work_area_id.name"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Severidad: </strong><span t-field="doc.security_situation_id.event_severity"/></td>
+                                        <t t-if="doc.security_situation_id.is_construction == 'yes'">
+                                            <td><strong>Responsable de Obra: </strong><span t-field="doc.security_situation_id.construction_supervisor"/></td>
+                                        </t>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Causa: </strong><span t-field="doc.security_situation_id.cause"/></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Medidas Inmediatas: </strong><span t-field="doc.security_situation_id.immediate_actions"/></td>
+                                        <td></td>
+                                    </tr>
+                                </thead>
                             </table>
 
                             <p>
@@ -80,50 +52,59 @@
                                 <span t-field="doc.security_situation_id.details_whats"/>
                             </p>
 
-<!--                            <h4>Información del empleado</h4>-->
-<!--                            <p>-->
-<!--                                <strong>Puesto de trabajo: </strong><span t-field="doc.security_situation_id.job_id"/><br></br>-->
-<!--                                <strong>Departamento:</strong><span t-field="doc.security_situation_id.department_id"/><br></br>-->
-<!--                                <strong>Líder Directo:</strong><span t-field="doc.security_situation_id.parent_id"/><br></br>-->
-<!--                            </p>-->
+                            <t t-if="doc.security_situation_id.employee_id">
+                                <h4>Información del Empleado</h4>
+                                <table class="table table-sm table-borderless" style="width: 100%;">
+                                    <thead>
+                                        <tr>
+                                            <td><strong>Empleado Involucrado: </strong><span t-field="doc.security_situation_id.employee_id.name"/></td>
+                                            <td><strong>Estado Laboral: </strong><span t-field="doc.security_situation_id.actual_laboral_state"/></td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Puesto al que pertenece: </strong><span t-field="doc.security_situation_id.job_id"/></td>
+                                            <t t-if="doc.security_situation_id.actual_laboral_state != 'normal'">
+                                                <td><strong>Días de incapacidad: </strong><span t-field="doc.security_situation_id.given_days"/></td>
+                                            </t>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Departamento al que pertenece: </strong><span t-field="doc.security_situation_id.department_id"/></td>
+                                            <td><strong>Tipo de atención médica: </strong><span t-field="doc.security_situation_id.attention_type"/></td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Líder directo a cargo del empleado: </strong><span t-field="doc.security_situation_id.parent_id"/></td>
+                                            <td></td>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </t>
 
-                            <hr/>
+                            <t t-if="doc.security_situation_id.employee_id and doc.security_situation_id.is_injuried == 'yes'">
+                                <h4>Información Sobre Lesiones</h4>
+                                <table class="table table-sm table-borderless" style="width: 100%;">
+                                    <thead>
+                                        <tr>
+                                            <td><strong>Tipo de Lesión: </strong><span t-field="doc.security_situation_id.injury_type_id"/></td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Factor Tipo: </strong><span t-field="doc.security_situation_id.factor_type"/></td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Severidad: </strong><span t-field="doc.security_situation_id.injury_severity"/></td>
+                                            <td></td>
+                                        </tr>
+                                    </thead>
+                                </table>
 
-                            <h4>Situación Médica y Laboral</h4>
+                                <p>
+                                    <strong>Partes del Cuerpo Afectadas: </strong><span t-field="doc.security_situation_id.injured_body_part"/><br></br>
+                                </p>
 
-                            <p>
-                                <strong>Investigador: </strong><span t-field="doc.security_situation_id.construction_supervisor"/>
-<!--                                <strong>Diagnostico: </strong><span t-field="doc.medic_diagnostic"/><br></br>-->
-<!--                                <strong>Tratamiento médico: </strong><span t-field="doc.medical_treatment"/><br></br>-->
-<!--                                <strong>Tipo de atención: </strong><span t-field="doc.attention_type"/><br></br>-->
-<!--                                <strong>Estado laboral: </strong><span t-field="doc.actual_laboral_state"/><br></br>-->
-<!--                                <strong>Días de incapacidad: </strong><span t-field="doc.given_days"/><br></br>-->
-<!--                                <strong>Fecha de regreso: </strong><span t-field="doc.return_activities_date" t-options='{"widget": "date"}'/><br></br>-->
-                            </p>
-
-                            <table class="table table-sm table-borderless" style="width: 100%;">
-                                <tr>
-<!--                                    <td><strong>Diagnostico: </strong><span t-field=" "/></td>-->
-                                    <td><strong>Estado laboral: </strong><span t-field="doc.actual_laboral_state"/></td>
-                                </tr>
-                                <tr>
-<!--                                    <td><strong>Tratamiento médico: </strong><span t-field=" "/></td>-->
-                                    <td><strong>Días de incapacidad: </strong><span t-field="doc.given_days"/></td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Tipo de atención: </strong><span t-field="doc.attention_type"/></td>
-                                    <td></td>
-                                </tr>
-                            </table>
-
-                            <p>
-                                <strong>Fecha de regreso: </strong><span t-field="doc.return_activities_date" t-options='{"widget": "date"}'/>
-                            </p>
-
-                            <hr/>
-
-                            <h4>Comentarios finales</h4>
-                            <p><span t-field="doc.final_summary"/></p>
+                                <p>
+                                    <strong>Descripción de la Lesión:</strong><br></br>
+                                    <span t-field="doc.security_situation_id.injury_description"/>
+                                </p>
+                            </t>
 
                         </div>
                     </t>
