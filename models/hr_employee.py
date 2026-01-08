@@ -4,8 +4,8 @@ from odoo.tools import float_round
 class HREmployee(models.Model):
     _inherit = 'hr.employee'
 
-    # Declaro un campo que se usará para el contador y otro para que actue como string
-    # que será el mostrado en el decoration(views)
+    # Declaro un campo que se usará para el contador y otro para que actue como string,
+    # el cual será el mostrado en el decoration(views)
     incident_count = fields.Integer(string="Incidentes", compute='_compute_security_counts', store=True)
     incident_count_string = fields.Char(string="Incidentes_String")
 
@@ -125,15 +125,19 @@ class HREmployee(models.Model):
                 employee.last_imc == 0.0
                 employee.blood_type == 0.0
 
-    # Este metodo filtra todos los registros de situaciones de seguridad ligadas a un empleado
+    # Estos metodos filtran todos los registros de situaciones y salud ligadas a un empleado
+    # Utilizados para crear botones
     def action_open_employee_situations(self):
         self.ensure_one()
         return {
             'name': ('Situaciones de seguridad de %s' % self.name),
             'type': 'ir.actions.act_window',
-            'res_model': 'security.situation',
+            'res_model': 'security.situation', # Aquí hace la referencia al modelo donde se va a filtrar
             'view_mode': 'tree,form',
+            # Hacemos un filtro de busqueda que indique solo los que tengan el mismo id, en este caso, de employee
             'domain': [('employee_id', '=', self.id)],
+            # Asignamos el campo employee_id del modelo a referenciar, con el propio id de este modelo
+            # A la vez, filtramos por "type", que es un campo en 'security.situation'
             'context': {
                 'default_employee_id': self.id,
                 'group_by': 'type',

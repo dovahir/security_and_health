@@ -1,7 +1,4 @@
-from odoo import models, fields, _, api
-from odoo.exceptions import UserError
-import datetime
-from datetime import date, timedelta
+from odoo import models, fields
 
 class FinalReport(models.Model):
     _name = 'final.report'

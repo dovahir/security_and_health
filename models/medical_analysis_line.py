@@ -1,8 +1,11 @@
 from odoo import models, fields, api
 
+# Modelo utilizado para conectar los resultados de análisis de un empleado con el tipo de analisis y
+# parametros correspondientes,principalmente en un notebook en medical.analysis
+
 class MedicalAnalysisLine(models.Model):
     _name = 'medical.analysis.line'
-    _description = 'Línea de Resultado de Análisis Médico'
+    _description = 'Notebook de Resultados de Análisis Médicos'
 
     analysis_id = fields.Many2one('medical.analysis',
                                   string='Análisis',

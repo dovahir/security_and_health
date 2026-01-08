@@ -3,7 +3,7 @@ from odoo.exceptions import UserError
 
 class EmployeePressure(models.Model):
     _name ='employee.pressure'
-    _description = 'Registro de Presión Arterial'
+    _description = 'Registro de presión arterial'
     _rec_name = 'employee_id'
     _order = 'record_date desc'
 

@@ -325,10 +325,10 @@ class SecuritySituation(models.Model):
     def _checkr_return_activities_date(self):
         for record in self:
             if record.return_activities_date < fields.Date.today():
-                raise UserError("No puedes registrar una fecha pasada.")
+                raise UserError("No puedes registrar una fecha pasada para regreso de actividades.")
 
             if record.given_days < 0:
-                raise UserError(_("Revisar valor de días"))
+                raise UserError(_("Revisar valor de días de incapacidad"))
 
     @api.depends('return_activities_date', 'given_days', 'event_date')
     def _compute_return_activities_date(self):

@@ -28,17 +28,6 @@
                     <group>
                         <field name="security_situation_id" readonly="1"/>
                     </group>
-<!--                    <group>-->
-<!--                        <group>-->
-<!--                            <field name="actual_laboral_state"/>-->
-<!--                            <field name="given_days" invisible="actual_laboral_state == 'normal'"/>-->
-<!--                            <field name="attention_type"/>-->
-<!--                            <field name="attention_cost" invisible="attention_type != 'private'"/>-->
-<!--                        </group>-->
-<!--                    </group>-->
-<!--                    <div class="alert alert-warning" role="alert" invisible="given_days == '0'">-->
-<!--                        <field name="return_date_warning" nolable="1" readonly="1"/>-->
-<!--                    </div>-->
                     <notebook>
                         <page string="Investigación de Causas">
                             <field name="corrective_actions" placeholder="Causas inmediatas, Causa Raíz, Acciones..."/>
