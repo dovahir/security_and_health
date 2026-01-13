@@ -8,7 +8,7 @@ class BodyParts(models.Model):
 
     name = fields.Char(string='Parte del Cuerpo', required=True)
 
-    _sql_constraints = [
-        ('name_uniq_body_part', 'unique (name)', 'Esta parte del cuerpo ya está registrada.')
-    ]
+    # _sql_constraints = [
+    #     ('name_uniq_body_part', 'unique (name)', 'Esta parte del cuerpo ya está registrada.')
+    # ]
 
