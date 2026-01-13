@@ -10,6 +10,8 @@ class MedicalAnalysisParameter(models.Model):
     unit_of_measure = fields.Char(string='Unidad de Medida')
 
     # Restriccion en BD para el nombre del parametro
-    _sql_constraints = [
-        ('name_uniq', 'unique (name)', 'Este parámetro ya existe.')
-    ]
+    # _sql_constraints = [
+    #     ('name_uniq_parameter', 'unique (name)', 'Este parámetro ya existe.')
+    # ]
+
+    _name_unique_analysis_parameter = models.Constraint('unique (name)', 'Este parametro de análisis ya existe')

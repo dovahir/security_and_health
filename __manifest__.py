@@ -30,7 +30,6 @@
         'views/medical_analysis_parameter_view.xml',
         'views/security_attention_view.xml',
         'views/menu_view.xml',
-        'data/lang_no_seconds.xml',
         'data/security_and_health_data.xml',
         'data/ir_sequence_data.xml',
 ],

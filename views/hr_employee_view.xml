@@ -62,32 +62,32 @@
                     <notebook>
                         <page name="pressure_tracking" string="Seguimiento de la presión">
                             <field name="pressure_daily_ids" widget="section_and_content" nolabel="1">
-                                <tree editable="bottom" create="false">
+                                <list editable="bottom" create="false">
                                     <field name="record_date" readonly="1"/>
                                     <field name="blood_pressure_systolic" readonly="1"/>
                                     <field name="blood_pressure_diastolic" readonly="1"/>
-                                </tree>
+                                </list>
                             </field>
                         </page>
                         <page name="medical_analysis" string="Análisis Médicos">
                             <field name="analysis_ids" nolabel="1">
-                                <tree create="false">
+                                <list create="false">
                                     <field name="name" readonly="1"/>
                                     <field name="file_name" readonly="1"/>
                                     <field name="analysis_date" readonly="1"/>
-                                </tree>
+                                </list>
                             </field>
                         </page>
                         <page name="health_records" string="Historial de Salud">
                             <field name="health_record_ids" nolabel="1">
-                                <tree editable="bottom" create="false">
+                                <list editable="bottom" create="false">
                                     <field name="record_date" readonly="1"/>
                                     <field name="height" readonly="1"/>
                                     <field name="weight" readonly="1"/>
                                     <field name="blood_type" readonly="1"/>
                                     <field name="imc" readonly="1"/>
                                     <field name="notes"/>
-                                </tree>
+                                </list>
                             </field>
                         </page>
                     </notebook>

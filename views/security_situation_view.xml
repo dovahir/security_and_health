@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-    <record id="view_security_situation_tree" model="ir.ui.view">
-        <field name="name">Security Situation Tree</field>
+    <record id="view_security_situation_list" model="ir.ui.view">
+        <field name="name">Security Situation List</field>
         <field name="model">security.situation</field>
         <field name="arch" type="xml">
-            <tree string="Situación de Seguridad" expand="1">
+            <list string="Situación de Seguridad" expand="1">
                 <field name="name" readonly="1" decoration-bf="1"/>
                 <field name="type"/>
                 <field name="event_date" context="{'time_format': 'HH:mm'}"/>
@@ -16,7 +16,7 @@
                        decoration-info="state == 'active'"
                        decoration-success="state == 'concluded'"
                 />
-            </tree>
+            </list>
         </field>
     </record>
 
@@ -64,8 +64,8 @@
                         </group>
                         <group string="Responsables">
                             <field name="supervisor_ssma" options="{'no_create': True}" required="1" widget="many2one_avatar_user" readonly="state == 'concluded'"/>
-                            <field name="is_construction_supervisor" readonly="state == 'concluded'" widget="radio" options="{'horizontal': true}"/>
-                            <field name="construction_supervisor" readonly="state == 'concluded'" invisible="is_construction_supervisor != 'yes'"/>
+                            <field name="is_construction" readonly="state == 'concluded'" widget="radio" options="{'horizontal': true}"/>
+                            <field name="construction_supervisor" readonly="state == 'concluded'" invisible="is_construction != 'yes'"/>
                         </group>
                     </group>
                     <group string="Info. del Empleado">
@@ -142,21 +142,18 @@
 
                         <page string="Seguimiento / Atenciones">
                             <field name="attention_ids" nolabel="1" context="{'default_situation_id': id}">
-                                <tree editable="bottom" string="Atenciones">
+                                <list editable="bottom" string="Atenciones">
                                     <field name="date_time" readonly="parent.state == 'concluded'"/>
                                     <field name="attention_type" readonly="parent.state == 'concluded'"/>
                                     <field name="responsible_id" readonly="parent.state == 'concluded'"/>
                                     <field name="action_taken" string="Detalle" readonly="parent.state == 'concluded'"/>
-                                </tree>
+                                </list>
                             </field>
                         </page>
                     </notebook>
                 </sheet>
 
-                <div class="oe_chatter">
-                   <field name="message_follower_ids" groups="base.group_user"/>
-                   <field name="message_ids" widget="mail_thread"/>
-                </div>
+                <chatter/>
 
             </form>
         </field>
@@ -200,17 +197,13 @@
                 <filter name="event_date" string="Fecha del Evento" date="event_date"/>
                 <separator/>
 
-                <group expand="1" string="Agrupar por">
+                <group>
                     <filter name="group_by_type" string="Tipo"
                             context="{'group_by': 'type'}"/>
-                    <filter name="group_by_injury_type" string="Tipo de lesión"
-                            context="{'group_by': 'injury_type_id'}"/>
                     <filter name="group_by_factor_type" string="Factor Tipo"
                             context="{'group_by': 'factor_type'}"/>
                     <filter name="group_by_severity" string="Severidad"
                             context="{'group_by': 'event_severity'}"/>
-                    <filter name="group_by_injured_body_part" string="Parte del cuerpo lesionada"
-                            context="{'group_by': 'injured_body_part'}"/>
                     <filter name="group_by_work_center" string="Ubicaciones de Trabajo"
                             context="{'group_by': 'work_center_id'}"/>
                     <filter name="group_by_employee" string="Empleado"
@@ -255,13 +248,13 @@
     <record id="action_security_situation" model="ir.actions.act_window">
         <field name="name">Situaciones</field>
         <field name="res_model">security.situation</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">list,form</field>
     </record>
 
     <record id="action_security_situation_analysis" model="ir.actions.act_window">
         <field name="name">Estadísticas de Seguridad</field>
         <field name="res_model">security.situation</field>
-        <field name="view_mode">graph,pivot,tree</field>
+        <field name="view_mode">graph,pivot,list</field>
         <field name="context">{'search_default_group_by_type': 1}</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">

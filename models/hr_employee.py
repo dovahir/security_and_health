@@ -133,7 +133,7 @@ class HREmployee(models.Model):
             'name': ('Situaciones de seguridad de %s' % self.name),
             'type': 'ir.actions.act_window',
             'res_model': 'security.situation', # Aquí hace la referencia al modelo donde se va a filtrar
-            'view_mode': 'tree,form',
+            'view_mode': 'list,form',
             # Hacemos un filtro de busqueda que indique solo los que tengan el mismo id, en este caso, de employee
             'domain': [('employee_id', '=', self.id)],
             # Asignamos el campo employee_id del modelo a referenciar, con el propio id de este modelo
@@ -150,7 +150,7 @@ class HREmployee(models.Model):
             'name': ('Registros de Salud para %s' % self.name),
             'type': 'ir.actions.act_window',
             'res_model': 'employee.health',
-            'view_mode': 'tree,form',
+            'view_mode': 'list,form',
             'domain': [('employee_id', '=', self.id)],
             'context': {
                 'default_employee_id': self.id,
@@ -163,7 +163,7 @@ class HREmployee(models.Model):
             'name': ('Registros de Presión para %s' % self.name),
             'type': 'ir.actions.act_window',
             'res_model': 'employee.pressure',
-            'view_mode': 'tree,form',
+            'view_mode': 'list,form',
             'domain': [('employee_id', '=', self.id)],
             'context': {
                 'default_employee_id': self.id,

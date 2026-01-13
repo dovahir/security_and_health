@@ -25,7 +25,7 @@
     <record id="action_medical_analysis_type" model="ir.actions.act_window">
         <field name="name">Tipos de Análisis (Plantillas)</field>
         <field name="res_model">medical.analysis.type</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">list,form</field>
     </record>
 
 </odoo>

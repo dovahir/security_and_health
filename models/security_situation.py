@@ -1,5 +1,3 @@
-from contextlib import nullcontext
-
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError
 import base64
@@ -180,7 +178,7 @@ class SecuritySituation(models.Model):
                                       tracking=True,
                                       default=lambda self: self.env.user.employee_id,
                                       required=True)
-    is_construction_supervisor = fields.Selection([
+    is_construction = fields.Selection([
            ('yes', 'Sí'),
            ('no', 'No')
       ], string='¿Existe Responsable de Obra?', default='no')
@@ -203,7 +201,7 @@ class SecuritySituation(models.Model):
         ('private', 'Privada'),
         ('public', 'Pública'),
     ], string="Tipo de atención médica", tracking=True)
-    attention_cost = fields.Integer(string="Costo de Atención Médica Privada", tracking=True, help="Costo total de la atención médica (En pesos MX)")
+    attention_cost = fields.Char(string="Costo de Atención Médica Privada", tracking=True)
 
     # Cambia el estado a 'Activo' (Volver a Borrador) o Concluido
     def action_conclude(self):
@@ -346,40 +344,3 @@ class SecuritySituation(models.Model):
         for record in self:
             if record.given_days < 0:
                 raise UserError(_("Revisar días de incapacidad (No puede ser negativo)"))
-
-    @api.onchange('type')
-    def _onchange_type(self):
-        if self.type != 'restricted_work_case':
-            self.rwc_days = 0
-
-    @api.onchange('is_construction_supervisor')
-    def _onchange_is_construction_supervisor(self):
-        if self.is_construction_supervisor == 'no':
-            self.construction_supervisor = ""
-
-    @api.onchange('attention_type')
-    def _onchange_attention_type(self):
-        if self.attention_type != 'private':
-            self.attention_cost = 0
-
-    @api.onchange('actual_laboral_state')
-    def _onchange_actual_laboral_state(self):
-        if self.actual_laboral_state == 'normal':
-            self.given_days = 0
-            self.attention_type = 'na'
-
-    @api.onchange('is_injuried')
-    def _onchange_is_injuried(self):
-        if self.is_injuried == 'no':
-            self.is_initial_attention = False
-            self.injury_type_id = False
-            self.factor_type = False
-            self.injury_severity = False
-            self.injury_description = ''
-            self.injured_body_part = False
-
-    @api.onchange('employee_id')
-    def _onchange_employee_id(self):
-        if self.employee_id:
-            self.actual_laboral_state = 'normal'
-            self.is_injuried = 'no'

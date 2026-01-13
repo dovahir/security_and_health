@@ -23,17 +23,17 @@
         </field>
     </record>
 
-    <record id="view_employee_pressure_tree" model="ir.ui.view">
-        <field name="name">Employee Health Tree</field>
+    <record id="view_employee_pressure_list" model="ir.ui.view">
+        <field name="name">Employee Health List</field>
         <field name="model">employee.pressure</field>
         <field name="arch" type="xml">
-            <tree string="Registros diarios de presión">
+            <list string="Registros diarios de presión">
                 <field name="employee_id"
                        widget="many2one_avatar_user"/>
                 <field name="record_date"/>
                 <field name="blood_pressure_systolic"/>
                 <field name="blood_pressure_diastolic"/>
-            </tree>
+            </list>
         </field>
     </record>
 
@@ -48,7 +48,7 @@
                 <filter name="record_date" string="Fecha" date="record_date"/>
                 <separator/>
 
-                <group expand="1" string="Agrupar por">
+                <group>
                     <filter name="group_by_employee" string="Empleado"
                             context="{'group_by': 'employee_id'}"/>
                 </group>
@@ -59,6 +59,6 @@
     <record id="action_employee_pressure_daily" model="ir.actions.act_window">
         <field name="name">Registros diarios de presión</field>
         <field name="res_model">employee.pressure</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">list,form</field>
     </record>
 </odoo>
