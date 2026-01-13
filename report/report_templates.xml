@@ -34,7 +34,7 @@
                                     </tr>
                                     <tr>
                                         <td><strong>Severidad: </strong><span t-field="doc.security_situation_id.event_severity"/></td>
-                                        <t t-if="doc.security_situation_id.is_construction == 'yes'">
+                                        <t t-if="doc.security_situation_id.is_construction_supervisor == 'yes'">
                                             <td><strong>Responsable de Obra: </strong><span t-field="doc.security_situation_id.construction_supervisor"/></td>
                                         </t>
                                     </tr>
