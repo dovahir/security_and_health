@@ -76,7 +76,7 @@ class MedicalAnalysis(models.Model):
             }))
         self.analysis_line_ids = lines
 
-    #Funcion que hace validaciones al archivo
+    #Funcion que hace validaciones al archivo PDF
     @api.constrains('analysis_file')
     def _check_pdf(self):
         for record in self:
@@ -100,7 +100,7 @@ class MedicalAnalysis(models.Model):
             if not file_bytes.startswith(b"%PDF"):
                 raise UserError(_("PDF no valido"))
 
-    # Restriccion de fecha futura
+    # Restriccion de fecha futura para fecha de analisis
     @api.constrains('analysis_date')
     def _check_analysis_date(self):
         for record in self:
