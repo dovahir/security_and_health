@@ -368,11 +368,6 @@ class SecuritySituation(models.Model):
             self.given_days = 0
             self.attention_type = 'na'
 
-    @api.onchange('employee_id')
-    def _onchange_employee_id(self):
-        if self.employee_id:
-            self.actual_laboral_state = 'normal'
-
     @api.onchange('is_injuried')
     def _onchange_is_injuried(self):
         if self.is_injuried == 'no':
@@ -382,3 +377,9 @@ class SecuritySituation(models.Model):
             self.injury_severity = False
             self.injury_description = ''
             self.injured_body_part = False
+
+    @api.onchange('employee_id')
+    def _onchange_employee_id(self):
+        if self.employee_id:
+            self.actual_laboral_state = 'normal'
+            self.is_injuried = 'no'
