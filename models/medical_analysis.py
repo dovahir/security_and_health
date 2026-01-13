@@ -76,7 +76,7 @@ class MedicalAnalysis(models.Model):
             }))
         self.analysis_line_ids = lines
 
-    #Funcion que hace validaciones al archivo PDF
+    #Funcion que hace validaciones al archivo PDF 
     @api.constrains('analysis_file')
     def _check_pdf(self):
         for record in self:

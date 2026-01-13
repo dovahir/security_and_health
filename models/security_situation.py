@@ -383,3 +383,4 @@ class SecuritySituation(models.Model):
         if self.employee_id:
             self.actual_laboral_state = 'normal'
             self.is_injuried = 'no'
+
