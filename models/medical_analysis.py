@@ -42,7 +42,26 @@ class MedicalAnalysis(models.Model):
         ('ready', 'Concluido'),
     ], string='Estado', default='draft', required=True, tracking=True)
 
-    # Metodo de cambio de estado
+    view_pdf = fields.Selection([
+        ('show', 'Visualizar PDF'),
+        ('hide', 'Ocultar PDF'),
+    ], string='view PDF', default='hide')
+
+    # Metodos de cambio view_pdf
+    def action_show(self):
+        self.ensure_one()
+        self.view_pdf = 'show'
+
+    def action_hide(self):
+        self.ensure_one()
+        self.view_pdf = 'hide'
+
+    @api.onchange('analysis_file')
+    def _onchange_analysis_file(self):
+        if not self.analysis_file:
+            self.view_pdf = 'hide'
+
+    # Metodos de cambio state
     def action_draft(self):
         """ Vuelve el estrado a Borrador """
         self.ensure_one()

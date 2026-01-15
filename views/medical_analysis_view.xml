@@ -43,19 +43,23 @@
                                 <field name="password" placeholder="Escribe la contraseña del archivo PDF (Si tiene)" readonly="state == 'ready'"/>
                              </group>
                             <group>
-                                <field name="analysis_file"
-                                       widget="pdf_viewer"
-                                       style="height: 600px; width: 75%; text-align: center;"
-                                       readonly="state == 'ready'"
-                                       invisible="state == 'draft'"
-                                />
-                                <field name="analysis_file"
+                                <group>
+                                    <field name="file_name" invisible="1"/>
+                                    <field name="analysis_file"
                                        widget="binary"
                                        filename="file_name"
-                                       readonly="state == 'ready'"
-                                />
-                                <field name="file_name" invisible="1"/>
+                                       readonly="state == 'ready'"/>
+                                </group>
+                                <group>
+                                    <field name="view_pdf" invisible="1"/>
+                                    <button name="action_show" string="Visualizar PDF" type="object" class="oe_highlight" invisible="view_pdf != 'hide' or not file_name"/>
+                                    <button name="action_hide" string="Ocultar PDF" type="object" invisible="view_pdf != 'show'"/>
+                                </group>
                             </group>
+                            <field name="analysis_file"
+                                       widget="pdf_viewer"
+                                       style="height: 600px; width: 75%; text-align: center;"
+                                       readonly="state == 'ready'" invisible="view_pdf == 'hide'" required="view_pdf == 'hide'"/>
                         </page>
                     </notebook>
                 </sheet>
