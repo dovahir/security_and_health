@@ -7,12 +7,12 @@
             <form string="Registro de Salud">
                 <sheet>
                     <group>
-                        <group>
-                            <field name="employee_id"/>
-                            <field name="record_date"/>
-                            <field name="blood_type" required="1"/>
+                        <group string="Info. del Empleado">
+                            <field name="employee_id" widget="many2one_avatar_user"/>
+                            <field name="department_id"/>
                         </group>
-                        <group>
+                        <group string="Registros de Salud">
+                            <field name="record_date"/>
                             <field name="height" string="Estatura (cm)"/>
                             <field name="weight" string="Peso (kg)"/>
                             <field name="imc" readonly="1"/>
@@ -29,12 +29,10 @@
         <field name="model">employee.health</field>
         <field name="arch" type="xml">
             <tree string="Registros de Salud">
-                <field name="employee_id"
-                       widget="many2one_avatar_user"/>
+                <field name="employee_id" widget="many2one_avatar_user"/>
                 <field name="record_date"/>
                 <field name="height"/>
                 <field name="weight"/>
-                <field name="blood_type"/>
                 <field name="imc"/>
             </tree>
         </field>

@@ -38,10 +38,10 @@
                                 </tree>
                             </field>
                         </page>
-                        <page string="Anexos">
-                             <group>
+                        <page string="Anexo PDF">
+                            <group>
                                 <field name="password" placeholder="Escribe la contraseña del archivo PDF (Si tiene)" readonly="state == 'ready'"/>
-                             </group>
+                            </group>
                             <group>
                                 <group>
                                     <field name="file_name" invisible="1"/>
@@ -50,11 +50,11 @@
                                        filename="file_name"
                                        readonly="state == 'ready'"/>
                                 </group>
-                                <group>
-                                    <field name="view_pdf" invisible="1"/>
-                                    <button name="action_show" string="Visualizar PDF" type="object" class="oe_highlight" invisible="view_pdf != 'hide' or not file_name"/>
+                                <field name="view_pdf" invisible="1"/>
+                                <div>
+                                    <button name="action_show" string="Visualizar PDF" type="object" invisible="view_pdf != 'hide' or not file_name"/>
                                     <button name="action_hide" string="Ocultar PDF" type="object" invisible="view_pdf != 'show'"/>
-                                </group>
+                                </div>
                             </group>
                             <field name="analysis_file"
                                        widget="pdf_viewer"
@@ -76,8 +76,6 @@
         <field name="model">medical.analysis</field>
         <field name="arch" type="xml">
             <search>
-<!--                <filter name="only_accidents" string="Solo Accidentes"-->
-<!--                        domain="[('type','=','accident')]"/>-->
 
                 <separator/>
                 <filter name="analysis_date" string="Fecha" date="analysis_date"/>

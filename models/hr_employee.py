@@ -25,7 +25,7 @@ class HREmployee(models.Model):
         ('B+', 'B+'), ('B-', 'B-'),
         ('AB+', 'AB+'), ('AB-', 'AB-'),
         ('O+', 'O+'), ('O-', 'O-'),
-    ], string='Tipo de Sangre', compute='_compute_last_health_data', store=True)
+    ], string='Tipo de Sangre', store=True)
 
     # Otros campos que se mostraran
     last_accident_date = fields.Datetime(string="Último accidente", compute='_compute_security_counts', store=True)
@@ -36,78 +36,82 @@ class HREmployee(models.Model):
 
     avg_systolic = fields.Integer(string='Promedio Sistólico', compute='_compute_average_pressure', store=True)
     avg_diastolic = fields.Integer(string='Promedio Diastólica', compute='_compute_average_pressure', store=True)
+    avg_fc = fields.Integer(string='Promedio Frecuencia Cardiaca', compute='_compute_average_pressure', store=True)
 
-    # Metodo para contabilizar y dar valor a los contadores de situaciones
-    @api.depends('security_situation_ids.type', 'security_situation_ids.event_date', 'incident_count_string', 'accident_count_string', 'quasi_accident_count_string')
-    def _compute_security_counts(self):
-        Situation = self.env['security.situation'].sudo() # Se usa compute_sudo() para que no falle el conteo por permisos
-        for employee in self:
-            # Conteos
-            incidents = Situation.search([
-                ('employee_id', '=', employee.id),
-                ('type', '=', 'incident'),
-            ])
-            accidents = Situation.search([
-                ('employee_id', '=', employee.id),
-                ('type', '=', 'accident'),
-            ])
-            quasi_accidents = Situation.search([
-                ('employee_id', '=', employee.id),
-                ('type', '=', 'quasi_accident'),
-            ])
-
-            employee.incident_count = str(len(incidents))
-            employee.accident_count = len(accidents)
-            employee.quasi_accident_count = len(quasi_accidents)
-
-            #Asigno valor al campo string correspondiente dependiendo del
-            #valor al hacer el conteo
-            if employee.incident_count == 0:
-                employee.incident_count_string = "0"
-            else:
-                employee.incident_count_string = str(employee.incident_count)
-
-            if employee.accident_count == 0:
-                employee.accident_count_string = "0"
-            else:
-                employee.accident_count_string = str(employee.accident_count)
-
-            if employee.quasi_accident_count == 0:
-                employee.quasi_accident_count_string = "0"
-            else:
-                employee.quasi_accident_count_string = str(employee.quasi_accident_count)
-
-            # Último accidente
-            last_accident = Situation.search([
-                ('employee_id', '=', employee.id),
-                ('type', '=', 'accident'),
-            ], order='event_date desc', limit=1)
-            employee.last_accident_date = last_accident.event_date if last_accident else False
+    # # Metodo para contabilizar y dar valor a los contadores de situaciones
+    # @api.depends('security_situation_ids.type', 'security_situation_ids.event_date', 'incident_count_string', 'accident_count_string', 'quasi_accident_count_string')
+    # def _compute_security_counts(self):
+    #     Situation = self.env['security.situation'].sudo() # Se usa compute_sudo() para que no falle el conteo por permisos
+    #     for employee in self:
+    #         # Conteos
+    #         incidents = Situation.search([
+    #             ('employee_id', '=', employee.id),
+    #             ('type', '=', 'incident'),
+    #         ])
+    #         accidents = Situation.search([
+    #             ('employee_id', '=', employee.id),
+    #             ('type', '=', 'accident'),
+    #         ])
+    #         quasi_accidents = Situation.search([
+    #             ('employee_id', '=', employee.id),
+    #             ('type', '=', 'quasi_accident'),
+    #         ])
+    #
+    #         employee.incident_count = str(len(incidents))
+    #         employee.accident_count = len(accidents)
+    #         employee.quasi_accident_count = len(quasi_accidents)
+    #
+    #         #Asigno valor al campo string correspondiente dependiendo del
+    #         #valor al hacer el conteo
+    #         if employee.incident_count == 0:
+    #             employee.incident_count_string = "0"
+    #         else:
+    #             employee.incident_count_string = str(employee.incident_count)
+    #
+    #         if employee.accident_count == 0:
+    #             employee.accident_count_string = "0"
+    #         else:
+    #             employee.accident_count_string = str(employee.accident_count)
+    #
+    #         if employee.quasi_accident_count == 0:
+    #             employee.quasi_accident_count_string = "0"
+    #         else:
+    #             employee.quasi_accident_count_string = str(employee.quasi_accident_count)
+    #
+    #         # Último accidente
+    #         last_accident = Situation.search([
+    #             ('employee_id', '=', employee.id),
+    #             ('type', '=', 'accident'),
+    #         ], order='event_date desc', limit=1)
+    #         employee.last_accident_date = last_accident.event_date if last_accident else False
 
     # Metodo para obtener el promedio de presion
-    @api.depends('pressure_daily_ids.blood_pressure_systolic', 'pressure_daily_ids.blood_pressure_diastolic')
+    @api.depends('pressure_daily_ids.ta_systolic', 'pressure_daily_ids.ta_diastolic', 'pressure_daily_ids.fc')
     def _compute_average_pressure(self):
         for employee in self:
             if employee.pressure_daily_ids:
-                total_systolic = sum(employee.pressure_daily_ids.mapped('blood_pressure_systolic'))
-                total_diastolic = sum(employee.pressure_daily_ids.mapped('blood_pressure_diastolic'))
+                total_systolic = sum(employee.pressure_daily_ids.mapped('ta_systolic'))
+                total_diastolic = sum(employee.pressure_daily_ids.mapped('ta_diastolic'))
+                total_fc = sum(employee.pressure_daily_ids.mapped('fc'))
                 count = len(employee.pressure_daily_ids)
 
                 # Redondea y asigna el promedio
                 employee.avg_systolic = float_round(total_systolic / count, precision_digits=0)
                 employee.avg_diastolic = float_round(total_diastolic / count, precision_digits=0)
+                employee.avg_fc = float_round(total_fc / count, precision_digits=0)
             else:
                 employee.avg_systolic = 0
                 employee.avg_diastolic = 0
+                employee.avg_fc = 0
 
     # Metodo para obtener los ultimos registros de salud de un empleado
-    @api.depends('health_record_ids.record_date', 'health_record_ids.height', 'health_record_ids.imc', 'health_record_ids.blood_type')
+    @api.depends('health_record_ids.record_date', 'health_record_ids.height', 'health_record_ids.imc')
     def _compute_last_health_data(self):
         for employee in self:
-            #Usado solo para bloodType
-            first_record = self.env['employee.health'].search([
-                ('employee_id', '=', employee.id)
-            ], order='record_date asc', limit=1)
+            # #Usado solo para bloodType
+            # first_record = self.env['employee.health'].search([
+            #     ('employee_id', '=', employee.id)
+            # ], order='record_date asc', limit=1)
 
             last_record = self.env['employee.health'].search([
                 ('employee_id', '=', employee.id)
@@ -117,13 +121,13 @@ class HREmployee(models.Model):
                 employee.last_height = last_record.height
                 employee.last_weight = last_record.weight
                 employee.last_imc = last_record.imc
-                employee.blood_type = first_record.blood_type
+                # employee.blood_type = first_record.blood_type
 
             else:
                 employee.last_height == 0.0
                 employee.last_weight == 0.0
                 employee.last_imc == 0.0
-                employee.blood_type == 0.0
+                # employee.blood_type == 0.0
 
     # Estos metodos filtran todos los registros de situaciones y salud ligadas a un empleado
     # Utilizados para crear botones

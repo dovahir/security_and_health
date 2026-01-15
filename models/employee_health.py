@@ -7,8 +7,13 @@ class EmployeeHealth(models.Model):
     _order = 'record_date desc'
     _rec_name = 'employee_id'
 
+    record_date = fields.Datetime(string='Fecha y Hora de Registro', required=True, default=fields.Datetime.now)
     employee_id = fields.Many2one('hr.employee', string='Nombre de empleado', ondelete='cascade', required=True)
-    record_date = fields.Date(string='Fecha de Registro', required=True, default=fields.Date.today)
+    department_id = fields.Many2one(comodel_name='hr.department',
+                                    related='employee_id.department_id',
+                                    string="Departamento",
+                                    store=True,
+                                    readonly=True)
     blood_type = fields.Selection([
         ('A+', 'A+'), ('A-', 'A-'),
         ('B+', 'B+'), ('B-', 'B-'),

@@ -5,18 +5,25 @@
         <field name="name">Employee Pressure Form</field>
         <field name="model">employee.pressure</field>
         <field name="arch" type="xml">
-            <form string="Registro de presión">
+            <form string="Registro de Presión">
                 <sheet>
                     <group>
-                        <field name="employee_id" options="{'no_create': True}"/>
-                        <field name="record_date"/>
-                        <label for="blood_pressure_systolic" string="Presión Arterial (mmHg)"/>
-                        <div>
-                            <span><strong>Sistólica:</strong></span>
-                            <field name="blood_pressure_systolic" class="oe_inline" required="1"/>
-                            <span><strong>Diastólica:</strong></span>
-                            <field name="blood_pressure_diastolic" class="oe_inline" required="1"/>
-                        </div>
+                        <group string="Info. del Empleado">
+                            <field name="employee_id" options="{'no_create': True}" widget="many2one_avatar_user"/>
+                            <field name="department_id"/>
+                        </group>
+                        <group string="Valoración">
+                            <field name="record_date"/>
+                            <label for="ta_systolic" string="Presión Arterial (mmHg)"/>
+                            <div>
+                                <span><strong>Sistólica:</strong></span>
+                                <field name="ta_systolic" class="oe_inline" required="1"/>
+                                <span><strong>Diastólica:</strong></span>
+                                <field name="ta_diastolic" class="oe_inline" required="1"/>
+                            </div>
+                            <field name="fc" required="1"/>
+                        </group>
+                        <field name="observations" placeholder="Observaciones..."/>
                     </group>
                 </sheet>
             </form>
@@ -27,12 +34,12 @@
         <field name="name">Employee Health Tree</field>
         <field name="model">employee.pressure</field>
         <field name="arch" type="xml">
-            <tree string="Registros diarios de presión">
-                <field name="employee_id"
-                       widget="many2one_avatar_user"/>
+            <tree string="Registros Presión Diarios">
+                <field name="employee_id" widget="many2one_avatar_user"/>
                 <field name="record_date"/>
-                <field name="blood_pressure_systolic"/>
-                <field name="blood_pressure_diastolic"/>
+                <field name="ta_systolic"/>
+                <field name="ta_diastolic"/>
+                <field name="fc"/>
             </tree>
         </field>
     </record>

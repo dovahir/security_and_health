@@ -16,26 +16,6 @@
                         <span>de Seguridad</span>
                     </div>
                 </button>
-
-                <button class="oe_stat_button"
-                        type="object"
-                        name="action_open_employee_health"
-                        help="Registros de Salud para este empleado">
-                    <div>
-                        <span>Registros </span><br/>
-                        <span>de Salud</span>
-                    </div>
-                </button>
-
-                <button class="oe_stat_button"
-                        type="object"
-                        name="action_open_employee_pressure"
-                        help="Registros de Presión para este Empleado">
-                    <div>
-                        <span>Registros </span><br/>
-                        <span>de Presión</span>
-                    </div>
-                </button>
             </xpath>
             <notebook position="inside">
                 <page name="employee_pressure" string="Salud y Seguridad">
@@ -58,14 +38,16 @@
                             <span class="oe_inline"> : </span>
                             <field name="avg_diastolic" readonly="1" class="oe_inline"/>
                         </div>
+                        <field name="avg_fc" readonly="1"/>
                     </group>
                     <notebook>
                         <page name="pressure_tracking" string="Seguimiento de la presión">
                             <field name="pressure_daily_ids" widget="section_and_content" nolabel="1">
                                 <tree editable="bottom" create="false">
                                     <field name="record_date" readonly="1"/>
-                                    <field name="blood_pressure_systolic" readonly="1"/>
-                                    <field name="blood_pressure_diastolic" readonly="1"/>
+                                    <field name="ta_systolic" readonly="1"/>
+                                    <field name="ta_diastolic" readonly="1"/>
+                                    <field name="fc" readonly="1"/>
                                 </tree>
                             </field>
                         </page>
