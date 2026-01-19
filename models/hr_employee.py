@@ -157,28 +157,44 @@ class HREmployee(models.Model):
                         },
         }
 
-    def action_open_employee_health(self):
-        self.ensure_one()
-        return {
-            'name': ('Registros de Salud para %s' % self.name),
-            'type': 'ir.actions.act_window',
-            'res_model': 'employee.health',
-            'view_mode': 'tree,form',
-            'domain': [('employee_id', '=', self.id)],
-            'context': {
-                'default_employee_id': self.id,
-                        },
-        }
+    # def action_open_employee_health(self):
+    #     self.ensure_one()
+    #     return {
+    #         'name': ('Registros de Salud para %s' % self.name),
+    #         'type': 'ir.actions.act_window',
+    #         'res_model': 'employee.health',
+    #         'view_mode': 'tree,form',
+    #         'domain': [('employee_id', '=', self.id)],
+    #         'context': {
+    #             'default_employee_id': self.id,
+    #                     },
+    #     }
+    #
+    # def action_open_employee_pressure(self):
+    #     self.ensure_one()
+    #     return {
+    #         'name': ('Registros de Presión para %s' % self.name),
+    #         'type': 'ir.actions.act_window',
+    #         'res_model': 'employee.pressure',
+    #         'view_mode': 'tree,form',
+    #         'domain': [('employee_id', '=', self.id)],
+    #         'context': {
+    #             'default_employee_id': self.id,
+    #                     },
+    #     }
 
-    def action_open_employee_pressure(self):
+    def action_open_employee_analysis(self):
         self.ensure_one()
         return {
-            'name': ('Registros de Presión para %s' % self.name),
+            'name': ('Análisis Médicos de %s' % self.name),
             'type': 'ir.actions.act_window',
-            'res_model': 'employee.pressure',
+            'res_model': 'medical.analysis',
             'view_mode': 'tree,form',
             'domain': [('employee_id', '=', self.id)],
+            # Asignamos el campo employee_id del modelo a referenciar, con el propio id de este modelo
+            # A la vez, filtramos por "type", que es un campo en 'security.situation'
             'context': {
                 'default_employee_id': self.id,
+                'group_by': 'type_id',
                         },
         }

@@ -10,7 +10,10 @@ class MedicalAnalysis(models.Model):
     _inherit = ['mail.thread', 'mail.activity.mixin']
 
     # Campos del formulario
-    name = fields.Char(string='Referencia', required=True, default='Nuevo análisis')
+    ref = fields.Char(string='Referencia', required=True, copy=False, index=True,
+                       default=lambda self: _('Nuevo Análisis'),
+                       tracking=True, readonly=True)
+
     type_id = fields.Many2one('medical.analysis.type',
                               string="Tipo de Análisis",
                               required=True,
@@ -20,8 +23,8 @@ class MedicalAnalysis(models.Model):
                                   ondelete='cascade',
                                   required=True,
                                   tracking=True)
-    analysis_date = fields.Date(string='Fecha de analisis', required=True, default=fields.Date.today, tracking=True)
-    laboratory = fields.Char(string='Laboratorio', tracking=True)
+    analysis_date = fields.Date(string='Fecha de Analisis', required=True, default=fields.Date.today, tracking=True)
+    laboratory = fields.Char(string='Laboratorio', tracking=True, required=True)
     laboratory_phone = fields.Char(string='Contacto', tracking=True)
 
     # Notebook de Resultados del analisis
@@ -46,6 +49,14 @@ class MedicalAnalysis(models.Model):
         ('show', 'Visualizar PDF'),
         ('hide', 'Ocultar PDF'),
     ], string='view PDF', default='hide')
+
+    # Metodo usado para la secuencia de ref (referencia)
+    @api.model_create_multi
+    def create(self, vals_list):
+        for vals in vals_list:
+            if vals.get('ref', _('Nuevo Análisis')) == _('Nuevo Análisis'):
+                vals['ref'] = (self.env['ir.sequence'].next_by_code('medical.analysis'))
+        return super().create(vals_list)
 
     # Metodos de cambio state
     def action_draft(self):

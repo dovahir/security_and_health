@@ -12,8 +12,17 @@
                         name="action_open_employee_situations"
                         help="Situaciones de seguridad registradas de este empleado">
                     <div>
-                        <span>Situaciones </span><br/>
+                        <span>Situaciones</span><br/>
                         <span>de Seguridad</span>
+                    </div>
+                </button>
+                <button class="oe_stat_button"
+                        type="object"
+                        name="action_open_employee_analysis"
+                        help="Análisis Médicos registrados de este empleado">
+                    <div>
+                        <span>Análisis</span><br/>
+                        <span>Médicos</span>
                     </div>
                 </button>
             </xpath>
@@ -54,7 +63,7 @@
                         <page name="medical_analysis" string="Análisis Médicos">
                             <field name="analysis_ids" nolabel="1">
                                 <tree create="false">
-                                    <field name="name" readonly="1"/>
+                                    <field name="ref" readonly="1"/>
                                     <field name="file_name" readonly="1"/>
                                     <field name="analysis_date" readonly="1"/>
                                 </tree>
