@@ -68,27 +68,38 @@
                             <field name="construction_supervisor" readonly="state == 'concluded'" invisible="is_construction_supervisor != 'yes'"/>
                         </group>
                     </group>
-                    <group string="Info. del Empleado">
+                    <group string="Detalles del Empleado">
                         <group>
-                            <group>
+                            <group string="Información Personal">
                                 <field name="employee_id" options="{'no_create': True}" readonly="state == 'concluded'" required="is_injuried == 'yes'"/>
-                                <field name="job_id" invisible="not employee_id"/>
-                                <field name="department_id" invisible="not employee_id"/>
-                                <field name="parent_id" widget="many2one_avatar_user" invisible="not employee_id"/>
+                                <field name="private_phone" invisible="not employee_id"/>
+                                <field name="private_email" invisible="not employee_id"/>
+                                <field name="private_street" invisible="not employee_id"/>
+                                <field name="private_street2" invisible="not employee_id"/>
+                                <field name="private_state_id" invisible="not employee_id"/>
+                                <field name="private_city" invisible="not employee_id"/>
+                                <field name="marital" invisible="not employee_id"/>
+                                <field name="birthday" invisible="not employee_id"/>
                             </group>
-                            <group>
-                                <field name="employee_picture" widget="image" class="oe_avatar" options="{'preview_image': 'employee_picture'}" invisible="not employee_id"/>
+                            <group string="">
+                                <field name="employee_picture" widget="image" class="oe_avatar" options="{'preview_image': 'employee_picture'}" invisible="not employee_id" string=""/>
                             </group>
                         </group>
-                        <group>
-                            <field name="actual_laboral_state" invisible="not employee_id"/>
+                        <group string="Situación Laboral">
+                            <field name="job_id" invisible="not employee_id"/>
+                            <field name="department_id" invisible="not employee_id"/>
+                            <field name="parent_id" widget="many2one_avatar_user" invisible="not employee_id"/>
+                            <field name="actual_laboral_state" invisible="not employee_id" readonly="state == 'concluded'"/>
                             <field name="given_days"
-                                   invisible="(not employee_id or actual_laboral_state == 'normal' or not actual_laboral_state) or is_injuried == 'no'"/>
+                                   invisible="not employee_id or actual_laboral_state == 'normal' or not actual_laboral_state"
+                                   readonly="state == 'concluded'"/>
                             <field name="attention_type"
-                                   invisible="(not employee_id or actual_laboral_state == 'normal' or not actual_laboral_state) or is_injuried == 'no'"/>
-                            <field name="currency_id" invisible="1"/>
-                            <field name="attention_cost" invisible="not employee_id or attention_type != 'private' or actual_laboral_state == 'normal' or is_injuried == 'no'"
-                                   help="Costo en pesos Mexicanos" widget="monetary"/>
+                                   invisible="not employee_id or actual_laboral_state == 'normal' or not actual_laboral_state"
+                                   readonly="state == 'concluded'"/>
+                            <field name="currency_id" invisible="1" readonly="state == 'concluded'"/>
+                            <field name="attention_cost" invisible="not employee_id or attention_type != 'private' or actual_laboral_state == 'normal'"
+                                   help="Costo en pesos Mexicanos" widget="monetary"
+                                   readonly="state == 'concluded'"/>
                         </group>
                     </group>
                     <group>

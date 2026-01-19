@@ -146,6 +146,3 @@ class MedicalAnalysis(models.Model):
 
             if not num.laboratory_phone.isdigit():
                 raise UserError (_("Solo se admiten números en el campo Contacto"))
-            total = len(num.laboratory_phone)
-            if total != 10:
-                raise UserError(_("No es un número de contacto valido"))

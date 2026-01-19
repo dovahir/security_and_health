@@ -103,7 +103,7 @@ class SecuritySituation(models.Model):
         ondelete='set null', index=True,
         help="Empleado involucrado (opcional). Al seleccionar, se despliegan más campos", tracking=True)
 
-    employee_picture = fields.Image(related='employee_id.image_1920', string='', readonly=True)
+    employee_picture = fields.Image(related='employee_id.image_1920', readonly=True)
 
     job_id = fields.Many2one(comodel_name='hr.job',
                              related='employee_id.job_id',
@@ -125,6 +125,15 @@ class SecuritySituation(models.Model):
                                 help="Líder directo a cargo del empleado",
                                 store=True,
                                 readonly=True)
+
+    private_phone = fields.Char(string='Teléfono Personal', related='employee_id.private_phone')
+    private_email = fields.Char(string='Correo Personal', related='employee_id.private_email')
+    private_street = fields.Char(string="Dirección Particular", related='employee_id.private_street')
+    private_street2 = fields.Char(string="", related='employee_id.private_street2')
+    private_state_id = fields.Many2one(string="Estado", related='employee_id.private_state_id')
+    private_city = fields.Char(string="Ciudad", related='employee_id.private_city')
+    marital = fields.Selection(string="Estado Civil", related='employee_id.marital')
+    birthday = fields.Date(string="Fecha de nacimiento", related='employee_id.birthday')
 
     actual_laboral_state = fields.Selection([
         ('normal', 'Actividades normales'),
