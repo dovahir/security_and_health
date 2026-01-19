@@ -25,10 +25,15 @@ class HREmployee(models.Model):
         ('B+', 'B+'), ('B-', 'B-'),
         ('AB+', 'AB+'), ('AB-', 'AB-'),
         ('O+', 'O+'), ('O-', 'O-'),
-    ], string='Tipo de Sangre', store=True)
+    ], string='Tipo de Sangre', store=True, tracking=True)
 
     # Otros campos que se mostraran
-    last_accident_date = fields.Datetime(string="Último accidente", compute='_compute_security_counts', store=True)
+    # last_accident_date = fields.Datetime(string="Última SS Relacionada", compute='_compute_security_counts', store=True)
+    last_ss = fields.Many2one(
+        'security.situation',
+        string='Última SS Relacionada',
+        compute='_compute_last_ss'
+    )
     avg_systolic = fields.Integer(string='Promedio Sistólico', compute='_compute_average_pressure', store=True)
     avg_diastolic = fields.Integer(string='Promedio Diastólica', compute='_compute_average_pressure', store=True)
     avg_fc = fields.Integer(string='Promedio Frecuencia Cardiaca', compute='_compute_average_pressure', store=True)
@@ -37,6 +42,17 @@ class HREmployee(models.Model):
     pressure_daily_ids = fields.One2many('employee.pressure', 'employee_id', string='Registros de Presión')
     analysis_ids = fields.One2many('medical.analysis', 'employee_id', string='Análisis Médicos')
     security_situation_ids = fields.One2many('security.situation', 'employee_id', string="Situaciones de Seguridad")
+
+    # Metodo para obtener el ultimo registro de SS de un empleado
+    @api.depends('security_situation_ids')
+    def _compute_last_ss(self):
+        for record in self:
+            # Filtrar por empleado y obtener la última creada
+            last_line = record.security_situation_ids.filtered(
+                lambda l: l.employee_id == record
+            ).sorted('create_date', reverse=True)
+
+            record.last_ss = last_line[0] if last_line else False
 
     # # Metodo para contabilizar y dar valor a los contadores de situaciones
     # @api.depends('security_situation_ids.type', 'security_situation_ids.event_date', 'incident_count_string', 'accident_count_string', 'quasi_accident_count_string')
@@ -108,11 +124,6 @@ class HREmployee(models.Model):
     @api.depends('health_record_ids.record_date', 'health_record_ids.height', 'health_record_ids.imc')
     def _compute_last_health_data(self):
         for employee in self:
-            # #Usado solo para bloodType
-            # first_record = self.env['employee.health'].search([
-            #     ('employee_id', '=', employee.id)
-            # ], order='record_date asc', limit=1)
-
             last_record = self.env['employee.health'].search([
                 ('employee_id', '=', employee.id)
             ], order='record_date desc', limit=1)
@@ -121,13 +132,11 @@ class HREmployee(models.Model):
                 employee.last_height = last_record.height
                 employee.last_weight = last_record.weight
                 employee.last_imc = last_record.imc
-                # employee.blood_type = first_record.blood_type
-
-            else:
-                employee.last_height == 0.0
-                employee.last_weight == 0.0
-                employee.last_imc == 0.0
-                # employee.blood_type == 0.0
+            #
+            # else:
+            #     employee.last_height == 0.0
+            #     employee.last_weight == 0.0
+            #     employee.last_imc == 0.0
 
     # Estos metodos filtran todos los registros de situaciones y salud ligadas a un empleado
     # Utilizados para crear botones

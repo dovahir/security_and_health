@@ -20,7 +20,7 @@
             <notebook position="inside">
                 <page name="employee_pressure" string="Salud y Seguridad">
                     <group string="Información de Salud General">
-                        <field name="blood_type" readonly="1"/>
+                        <field name="blood_type"/>
                         <label for="last_height" string="Estatura (cm)"/>
                         <div><field name="last_height" readonly="1" class="oe_inline"/></div>
                         <label for="last_weight" string="Peso (kg)"/>
@@ -29,7 +29,7 @@
                         <div><field name="last_imc" readonly="1" class="oe_inline"/></div>
                     </group>
                     <group string="Información de Seguridad">
-                        <field name="last_accident_date" readonly="1" string="Último Accidente"/>
+                        <field name="last_ss" readonly="1" options="{'no_open': True}"/>
                     </group>
                     <group string="Promedios de Salud">
                         <label for="avg_systolic" string="Promedio de presión (mmHg)"/>
@@ -62,13 +62,11 @@
                         </page>
                         <page name="health_records" string="Historial de Salud">
                             <field name="health_record_ids" nolabel="1">
-                                <tree editable="bottom" create="false">
+                                <tree editable="bottom" create="true">
                                     <field name="record_date" readonly="1"/>
-                                    <field name="height" readonly="1"/>
-                                    <field name="weight" readonly="1"/>
-                                    <field name="blood_type" readonly="1"/>
+                                    <field name="height"/>
+                                    <field name="weight"/>
                                     <field name="imc" readonly="1"/>
-                                    <field name="notes"/>
                                 </tree>
                             </field>
                         </page>

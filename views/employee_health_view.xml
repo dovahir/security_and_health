@@ -51,9 +51,6 @@
                 <group expand="1" string="Agrupar por">
                     <filter name="group_by_employee" string="Empleado"
                             context="{'group_by': 'employee_id'}"/>
-
-                    <filter name="group_by_blood_type" string="Tipo de Sangre"
-                            context="{'group_by': 'blood_type'}"/>
 <!--                    <filter name="group_by_responsable" string="Responsable"-->
 <!--                            context="{'group_by': 'responsible_id'}"/>-->
                 </group>

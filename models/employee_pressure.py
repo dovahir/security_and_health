@@ -41,7 +41,7 @@ class EmployeePressure(models.Model):
     #         if record.record_date > fields.Date.today():
     #             raise UserError("No puedes registrar una toma de presión con fecha futura.")
 
-        # === SEGUIMIENTO EN EL CHATTER DE LA SITUACIÓN ===
+    # === SEGUIMIENTO EN EL CHATTER DE hr.employee ===
 
     def create(self, vals_list):
         records = super().create(vals_list)
