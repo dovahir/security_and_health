@@ -29,14 +29,14 @@ class HREmployee(models.Model):
 
     # Otros campos que se mostraran
     last_accident_date = fields.Datetime(string="Último accidente", compute='_compute_security_counts', store=True)
-    pressure_daily_ids = fields.One2many('employee.pressure', 'employee_id', string='Registros de Presión')
-
-    analysis_ids = fields.One2many('medical.analysis', 'employee_id', string='Análisis Médicos')
-    security_situation_ids = fields.One2many('security.situation', 'employee_id', string="Situaciones de Seguridad")
-
     avg_systolic = fields.Integer(string='Promedio Sistólico', compute='_compute_average_pressure', store=True)
     avg_diastolic = fields.Integer(string='Promedio Diastólica', compute='_compute_average_pressure', store=True)
     avg_fc = fields.Integer(string='Promedio Frecuencia Cardiaca', compute='_compute_average_pressure', store=True)
+
+    # Campos 2many
+    pressure_daily_ids = fields.One2many('employee.pressure', 'employee_id', string='Registros de Presión')
+    analysis_ids = fields.One2many('medical.analysis', 'employee_id', string='Análisis Médicos')
+    security_situation_ids = fields.One2many('security.situation', 'employee_id', string="Situaciones de Seguridad")
 
     # # Metodo para contabilizar y dar valor a los contadores de situaciones
     # @api.depends('security_situation_ids.type', 'security_situation_ids.event_date', 'incident_count_string', 'accident_count_string', 'quasi_accident_count_string')
