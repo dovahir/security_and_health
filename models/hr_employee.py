@@ -6,14 +6,14 @@ class HREmployee(models.Model):
 
     # Declaro un campo que se usará para el contador y otro para que actue como string,
     # el cual será el mostrado en el decoration(views)
-    incident_count = fields.Integer(string="Incidentes", compute='_compute_security_counts', store=True)
-    incident_count_string = fields.Char(string="Incidentes_String")
-
-    accident_count = fields.Integer(string="Accidentes", compute='_compute_security_counts', store=True)
-    accident_count_string = fields.Char(string="Accidentes_String")
-
-    quasi_accident_count = fields.Integer(string="Cuasi Accidentes", compute='_compute_security_counts', store=True)
-    quasi_accident_count_string = fields.Char(string="Cuasi Accidentes_String")
+    # incident_count = fields.Integer(string="Incidentes", compute='_compute_security_counts', store=True)
+    # incident_count_string = fields.Char(string="Incidentes_String")
+    #
+    # accident_count = fields.Integer(string="Accidentes", compute='_compute_security_counts', store=True)
+    # accident_count_string = fields.Char(string="Accidentes_String")
+    #
+    # quasi_accident_count = fields.Integer(string="Cuasi Accidentes", compute='_compute_security_counts', store=True)
+    # quasi_accident_count_string = fields.Char(string="Cuasi Accidentes_String")
 
     # Estos campos son para resumen del último estado de salud general
     health_record_ids = fields.One2many('employee.health', 'employee_id', string='Registros de Salud')

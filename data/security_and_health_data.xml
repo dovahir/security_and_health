@@ -296,22 +296,38 @@
             <field name="description">La lumbalgia es el dolor localizado en la parte baja de la espalda, correspondiente a la zona lumbar de la columna vertebral.</field>
         </record>
 
+        <record id="injury_shock" model="injury.type">
+            <field name="name">Conmoción</field>
+            <field name="description">Es un estado de aturdimiento o pérdida temporal de la conciencia causado por un golpe fuerte en la cabeza o una sacudida violenta.</field>
+        </record>
+
+        <record id="injury_superficial" model="injury.type">
+            <field name="name">Trauma superficial</field>
+            <field name="description">Incluye rasguño, punción o pinchazo y lesión en ojo por cuerpo extraño.</field>
+        </record>
+
+        <record id="injury_suffocation" model="injury.type">
+            <field name="name">Asfixia</field>
+            <field name="description">Se produce cuando el aire no puede llegar a los pulmones, generalmente debido a una obstrucción física de las vías respiratorias.</field>
+        </record>
+
+        <record id="injury_poisoning" model="injury.type">
+            <field name="name">Envenenamiento o Intoxicación aguda</field>
+            <field name="description">Afección que ocurre cuando el cuerpo absorbe una sustancia tóxica, ya sea por ingestión, inhalación, contacto con la piel, ojos o membranas mucosas.</field>
+        </record>
+
+        <record id="injury_electricity" model="injury.type">
+            <field name="name">Efecto de la electricidad</field>
+            <field name="description">Daños ocacionados por electricidad.</field>
+        </record>
+
+        <record id="injury_radiation" model="injury.type">
+            <field name="name">Efectos de la radiación</field>
+            <field name="description">Daños ocacionados por radiación.</field>
+        </record>
+
 <!--  ########################################################################################  -->
 
-<!--&lt;!&ndash;        Centros de Trabajo&ndash;&gt;-->
-
-<!--        <record id="work_center_oficinas" model="work.center">-->
-<!--            <field name="name">OFICINAS</field>-->
-<!--        </record>-->
-
-<!--&lt;!&ndash;        Areas de Trabajo&ndash;&gt;-->
-
-<!--        <record id="work_area_oficinas" model="work.area">-->
-<!--            <field name="name">COMEDOR</field>-->
-<!--            <field name="work_center_id" ref="work_center_oficinas"/>-->
-<!--        </record>-->
-
-<!--    ######################################################################################  -->
 <!--        Tipos de actividades-->
 
         <record id="activities_hot_work" model="activities.type">
