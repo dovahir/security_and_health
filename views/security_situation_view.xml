@@ -6,12 +6,11 @@
         <field name="arch" type="xml">
             <tree string="Situación de Seguridad" expand="1">
                 <field name="name" readonly="1" decoration-bf="1"/>
+                <field name="event_date" context="{'time_format': 'HH:mm'}" string="Fecha y hora del evento"/>
                 <field name="type"/>
-                <field name="event_date" context="{'time_format': 'HH:mm'}"/>
-                <field name="employee_id" widget="many2one_avatar_user"/>
-                <field name="work_center_id"/>
-                <field name="work_area_id"/>
-                <field name="event_severity"/>
+                <field name="employee_id" widget="many2one_avatar_user" string="Empleado involucrado"/>
+                <field name="is_injuried" string="¿Resultó en heridos?"/>
+                <field name="location_situation" string="Lugar"/>
                 <field name="state" widget="badge"
                        decoration-info="state == 'active'"
                        decoration-success="state == 'concluded'"
@@ -49,7 +48,7 @@
                     </div>
                     <group string="Detalles de la Situación de Seguridad">
                         <group string="Info. de la Situación">
-                            <field name="event_date" string="Fecha del evento" required="1" widget="datetime" context="{'time_format': 'HH:mm'}" readonly="state == 'concluded'"/>
+                            <field name="event_date" required="1" widget="datetime" context="{'time_format': 'HH:mm'}" readonly="state == 'concluded'"/>
                             <field name="type" required="1" readonly="state == 'concluded'"/>
                             <field name="rwc_days" required="type == 'restricted_work_case'" invisible="type != 'restricted_work_case'" readonly="state == 'concluded'"/>
                             <field name="activities_type_id" readonly="state == 'concluded'"/>

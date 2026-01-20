@@ -25,8 +25,14 @@
                                         <td><strong>Empresa: </strong><span t-field="doc.security_situation_id.company_id"/></td>
                                     </tr>
                                     <tr>
-                                        <td><strong>Días de Trabajo Restringido: </strong><span t-field="doc.security_situation_id.rwc_days"/></td>
-                                        <td><strong>Ubicación de Trabajo:</strong><span t-field="doc.security_situation_id.work_center_id.name"/></td>
+                                        <t t-if="doc.security_situation_id.type == 'restricted_work_case'">
+                                            <td><strong>Días de Trabajo Restringido: </strong><span t-field="doc.security_situation_id.rwc_days"/></td>
+                                            <td><strong>Ubicación de Trabajo:</strong><span t-field="doc.security_situation_id.work_center_id.name"/></td>
+                                        </t>
+                                        <t t-else="">
+                                            <td></td>
+                                            <td><strong>Ubicación de Trabajo:</strong><span t-field="doc.security_situation_id.work_center_id.name"/></td>
+                                        </t>
                                     </tr>
                                     <tr>
                                         <td><strong>Tipo de Actividad: </strong><span t-field="doc.security_situation_id.activities_type_id"/></td>

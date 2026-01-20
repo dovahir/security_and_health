@@ -5,6 +5,7 @@ class FinalReport(models.Model):
     _description = 'Reporte final'
     _rec_name = 'security_situation_id'
     _inherit = ['mail.thread', 'mail.activity.mixin']
+    _order = 'create_date desc'
 
     # Conectar con situación de seguridad
     security_situation_id = fields.Many2one('security.situation',
@@ -24,8 +25,7 @@ class FinalReport(models.Model):
     lessons_learned = fields.Text(string="Lecciones Aprendidas", tracking=True)
     final_summary = fields.Text(string="Comentarios Finales", tracking=True)
 
-    return_date_warning = fields.Char(
-        string="Aviso de Regreso",
-        compute="_compute_return_date_warning"
-    )
-
+    # return_date_warning = fields.Char(
+    #     string="Aviso de Regreso",
+    #     compute="_compute_return_date_warning"
+    # )

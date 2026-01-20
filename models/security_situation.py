@@ -9,6 +9,7 @@ class SecuritySituation(models.Model):
     _name = 'security.situation'
     _description = 'Situación de Seguridad'
     _inherit = ['mail.thread', 'mail.activity.mixin']
+    _order = 'create_date desc'
 
     name = fields.Char(string='Referencia', required=True, copy=False, index=True,
                        default=lambda self: _('Nueva Situación'),
@@ -36,7 +37,8 @@ class SecuritySituation(models.Model):
 
     activities_type_id = fields.Many2one(comodel_name='activities.type',
                                          string="Tipo de Actividad",
-                                         tracking=True)
+                                         tracking=True,
+                                         required=True)
 
     event_severity = fields.Selection([
         ('minor', 'Menor'),
@@ -76,7 +78,7 @@ class SecuritySituation(models.Model):
         ('inside', 'Dentro de la empresa'),
         ('outside', 'Fuera de la empresa'),
         ('commute', 'Trayecto al trabajo')
-    ], string='¿Dónde sucedió?' , tracking=True)
+    ], string='¿Dónde sucedió?' , tracking=True, required=True)
 
     company_id = fields.Many2one(comodel_name='res.company',
                                  string="Empresa",
@@ -352,39 +354,39 @@ class SecuritySituation(models.Model):
         return super().create(vals_list)
 
     # Usado para mostrar mensaje del regreso de actividades
-    @api.depends('return_activities_date')
-    def _compute_return_date_warning(self):
-        today = date.today()
-        seven_days_later = today + timedelta(days=7)
-
-        for record in self:
-            warning = False
-            return_date = record.return_activities_date
-
-            if not return_date:
-                record.return_date_warning = False
-                continue
-            if return_date == today:
-                warning = "¡ATENCIÓN! El empleado debería estar actualmente en labores."
-            elif today < return_date <= seven_days_later:
-                remaining_days = (return_date - today).days
-                warning = f"AVISO: El empleado regresa en {remaining_days} días ({return_date.strftime('%d-%m-%Y')})."
-            elif return_date < today:
-                warning = "NOTA: La fecha de regreso ya pasó. Verifique el estado laboral."
-            else:  # Fecha lejana
-                warning = f"La fecha de regreso está programada para {return_date.strftime('%d-%m-%Y')}."
-
-            record.return_date_warning = warning
+    # @api.depends('return_activities_date')
+    # def _compute_return_date_warning(self):
+    #     today = date.today()
+    #     seven_days_later = today + timedelta(days=7)
+    #
+    #     for record in self:
+    #         warning = False
+    #         return_date = record.return_activities_date
+    #
+    #         if not return_date:
+    #             record.return_date_warning = False
+    #             continue
+    #         if return_date == today:
+    #             warning = "¡ATENCIÓN! El empleado debería estar actualmente en labores."
+    #         elif today < return_date <= seven_days_later:
+    #             remaining_days = (return_date - today).days
+    #             warning = f"AVISO: El empleado regresa en {remaining_days} días ({return_date.strftime('%d-%m-%Y')})."
+    #         elif return_date < today:
+    #             warning = "NOTA: La fecha de regreso ya pasó. Verifique el estado laboral."
+    #         else:  # Fecha lejana
+    #             warning = f"La fecha de regreso está programada para {return_date.strftime('%d-%m-%Y')}."
+    #
+    #         record.return_date_warning = warning
 
     # Para calcular la fecha de regreso de actividades
-    @api.depends('return_activities_date', 'given_days', 'event_date')
-    def _compute_return_activities_date(self):
-        for date in self:
-            init_date = date.event_date
-            incapacity_days = datetime.timedelta(days=date.given_days)
-            newDate = init_date + incapacity_days
-
-            date.return_activities_date = newDate
+    # @api.depends('return_activities_date', 'given_days', 'event_date')
+    # def _compute_return_activities_date(self):
+    #     for date in self:
+    #         init_date = date.event_date
+    #         incapacity_days = datetime.timedelta(days=date.given_days)
+    #         newDate = init_date + incapacity_days
+    #
+    #         date.return_activities_date = newDate
 
     # Restriccion para los dias de incapacidad
     @api.constrains('given_days')
