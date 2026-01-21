@@ -11,6 +11,12 @@ class EmployeeHealth(models.Model):
 
     record_date = fields.Datetime(string='Fecha y Hora de Registro', required=True, default=fields.Datetime.now)
     employee_id = fields.Many2one('hr.employee', string='Nombre de empleado', ondelete='cascade', required=True)
+    company_employee_id = fields.Many2one(comodel_name='res.company',
+                                          related='employee_id.company_id',
+                                          string="Empresa",
+                                          help="Empresa donde labora el empleado",
+                                          store=True,
+                                          readonly=True)
     department_id = fields.Many2one(comodel_name='hr.department',
                                     related='employee_id.department_id',
                                     string="Departamento",
@@ -19,6 +25,8 @@ class EmployeeHealth(models.Model):
     height = fields.Float(string='Estatura (cm)', digits=(3, 0))
     weight = fields.Float(string='Peso (kg)', digits=(5, 2))
     imc = fields.Float(string='IMC', compute='_compute_imc', store=True, digits=(4, 2))
+    blood_type = fields.Selection(string='Tipo de sangre', help='Solo puede cambiarse en el modulo "Empleados"', related='employee_id.blood_type')
+
     notes = fields.Text(string='Notas médicas')
 
     #Validar si la altura o peso es valida

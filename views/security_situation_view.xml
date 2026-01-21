@@ -248,6 +248,10 @@
                             context="{'group_by': 'parent_id'}"/>
                     <filter name="group_by_event_date" string="Fecha"
                             context="{'group_by': 'event_date'}"/>
+                    <filter name="group_by_is_injuried" string="¿Resultó en heridos?"
+                            context="{'group_by': 'is_injuried'}"/>
+                    <filter name="group_by_location_situation" string="Lugar"
+                            context="{'group_by': 'location_situation'}"/>
                 </group>
             </search>
         </field>

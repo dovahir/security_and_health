@@ -9,6 +9,7 @@
                     <group>
                         <group string="Info. del Empleado">
                             <field name="employee_id" widget="many2one_avatar_user"/>
+                            <field name="company_employee_id"/>
                             <field name="department_id"/>
                         </group>
                         <group string="Registros de Salud">
@@ -16,6 +17,7 @@
                             <field name="height" string="Estatura (cm)"/>
                             <field name="weight" string="Peso (kg)"/>
                             <field name="imc" readonly="1"/>
+                            <field name="blood_type"/>
                         </group>
                     </group>
                     <field name="notes" placeholder="Notas médicas adicionales..."/>
