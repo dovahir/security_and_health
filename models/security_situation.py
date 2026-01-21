@@ -86,6 +86,11 @@ class SecuritySituation(models.Model):
 
     phone_company = fields.Char(string="Teléfono", related='company_id.phone')
 
+    company_street = fields.Char(string="Dirección Particular", related='company_id.street')
+    company_street2 = fields.Char(string="", related='company_id.street2')
+    company_city = fields.Char(string="Ciudad", related='company_id.city')
+    company_state_id = fields.Many2one(string="Estado", related='company_id.state_id')
+
     work_center_id = fields.Many2one(comodel_name='hr.work.location',
                                      string="Ubicación de Trabajo",
                                      help="Ubicación en la empresa donde ocurrió la situación", tracking=True)
@@ -121,7 +126,7 @@ class SecuritySituation(models.Model):
     employee_id = fields.Many2one(  # Opcional
         comodel_name='hr.employee', string="Empleado",
         ondelete='set null', index=True,
-        help="Empleado involucrado (opcional). Al seleccionar, se despliegan más campos", tracking=True)
+        help="Empleado involucrado (opcional dependiendo la SS). Al seleccionar, se despliegan más campos", tracking=True)
 
     employee_picture = fields.Image(related='employee_id.image_1920', readonly=True)
 
@@ -142,7 +147,7 @@ class SecuritySituation(models.Model):
     job_id = fields.Many2one(comodel_name='hr.job',
                              related='employee_id.job_id',
                              string="Puesto de trabajo",
-                             help="Puesto al que pertenece empleado",
+                             help="Puesto que desempeña el empleado",
                              store=True,
                              readonly=True)
 
