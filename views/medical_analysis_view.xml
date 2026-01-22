@@ -12,6 +12,14 @@
                     <field name="state" widget="statusbar" statusbar_visible="draft,ready"/>
                 </header>
                 <sheet>
+                    <div class="oe_title ">
+                        <h1 class="d-flex flex-row">
+                            <field name="ref"/>
+                        </h1>
+                        <group>
+                            <field name="create_date" string="Fecha de creación" readonly="1"/>
+                        </group>
+                    </div>
                     <group>
                         <group>
                             <field name="type_id" widget="selection" readonly="state == 'ready'"/>
@@ -38,30 +46,32 @@
                                 </list>
                             </field>
                         </page>
-                        <page string="Anexos">
-                             <group>
-                                <field name="password" placeholder="Escribe la contraseña del archivo PDF (Si tiene)" readonly="state == 'ready'"/>
-                             </group>
+                        <page string="Anexo PDF">
                             <group>
-                                <field name="analysis_file"
-                                       widget="pdf_viewer"
-                                       style="height: 600px; width: 75%; text-align: center;"
-                                       readonly="state == 'ready'"
-                                       invisible="state == 'draft'"
-                                />
-                                <field name="analysis_file"
+                                <field name="password" placeholder="Escribe la contraseña del archivo PDF (Si tiene)" readonly="state == 'ready'"/>
+                            </group>
+                            <group>
+                                <group>
+                                    <field name="file_name" invisible="1"/>
+                                    <field name="analysis_file"
                                        widget="binary"
                                        filename="file_name"
-                                       readonly="state == 'ready'"
-                                />
-                                <field name="file_name" invisible="1"/>
+                                       readonly="state == 'ready'"/>
+                                </group>
+                                <field name="view_pdf" invisible="1"/>
+                                <div>
+                                    <button name="action_show" string="Visualizar PDF" type="object" invisible="view_pdf != 'hide' or not file_name"/>
+                                    <button name="action_hide" string="Ocultar PDF" type="object" invisible="view_pdf != 'show'"/>
+                                </div>
                             </group>
+                            <field name="analysis_file"
+                                       widget="pdf_viewer"
+                                       style="height: 600px; width: 75%; text-align: center;"
+                                       readonly="state == 'ready'" invisible="view_pdf == 'hide'"/>
                         </page>
                     </notebook>
                 </sheet>
-
                 <chatter/>
-
             </form>
         </field>
     </record>
@@ -71,8 +81,6 @@
         <field name="model">medical.analysis</field>
         <field name="arch" type="xml">
             <search>
-<!--                <filter name="only_accidents" string="Solo Accidentes"-->
-<!--                        domain="[('type','=','accident')]"/>-->
 
                 <separator/>
                 <filter name="analysis_date" string="Fecha" date="analysis_date"/>

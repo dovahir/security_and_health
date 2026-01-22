@@ -9,12 +9,14 @@ class SecuritySituation(models.Model):
     _name = 'security.situation'
     _description = 'Situación de Seguridad'
     _inherit = ['mail.thread', 'mail.activity.mixin']
+    _order = 'create_date desc'
 
     name = fields.Char(string='Referencia', required=True, copy=False, index=True,
                        default=lambda self: _('Nueva Situación'),
                        tracking=True, readonly=True)
 
     # Campos del formulario-----------------------------------------------------------
+
     # Info de la situación--------
 
     event_date = fields.Datetime(string="Fecha y Hora",
@@ -31,23 +33,12 @@ class SecuritySituation(models.Model):
         ('near_misses_incident', 'Incidente "Near Misses"')
     ], string="Tipo de Situación", required=True, tracking=True)
 
-    rwc_days = fields.Integer(string="Días de Trabajo Restringido")
-
-    company_id = fields.Many2one(comodel_name='res.company',
-                                 string="Empresa",
-                                 required=True,
-                                 default=lambda self: self.env.user.company_id.id)
-
-    work_center_id = fields.Many2one(comodel_name='hr.work.location',
-                                     string="Ubicación de Trabajo")
-
-    work_area_id = fields.Many2one(comodel_name='work.area',
-                                   string="Área / Lugar exacto",
-                                   help="Debe seleccionar ubicación de trabajo")
+    rwc_days = fields.Integer(string="Días de Trabajo Restringido", tracking=True)
 
     activities_type_id = fields.Many2one(comodel_name='activities.type',
                                          string="Tipo de Actividad",
-                                         tracking=True)
+                                         tracking=True,
+                                         required=True)
 
     event_severity = fields.Selection([
         ('minor', 'Menor'),
@@ -81,6 +72,33 @@ class SecuritySituation(models.Model):
         help="Empleados que presenciaron el evento (Opcional)",
         tracking=True)
 
+    # Ubicacion-----------
+
+    location_situation = fields.Selection([
+        ('inside', 'Dentro de la empresa'),
+        ('outside', 'Fuera de la empresa'),
+        ('commute', 'Trayecto al trabajo')
+    ], string='¿Dónde sucedió?' , tracking=True, required=True)
+
+    company_id = fields.Many2one(comodel_name='res.company',
+                                 string="Empresa",
+                                 help="Empresa donde ocurrió la situación", tracking=True)
+
+    phone_company = fields.Char(string="Teléfono", related='company_id.phone')
+
+    company_street = fields.Char(string="Dirección Particular", related='company_id.street')
+    company_street2 = fields.Char(string="", related='company_id.street2')
+    company_city = fields.Char(string="Ciudad", related='company_id.city')
+    company_state_id = fields.Many2one(string="Estado", related='company_id.state_id')
+
+    work_center_id = fields.Many2one(comodel_name='hr.work.location',
+                                     string="Ubicación de Trabajo",
+                                     help="Ubicación en la empresa donde ocurrió la situación", tracking=True)
+
+    work_area_id = fields.Many2one(comodel_name='work.area',
+                                   string="Área / Lugar exacto",
+                                   help="Debe seleccionar ubicación de trabajo", tracking=True)
+
     # Responsables--------
 
     supervisor_ssma = fields.Many2one(comodel_name='hr.employee',
@@ -89,28 +107,35 @@ class SecuritySituation(models.Model):
                                       tracking=True,
                                       default=lambda self: self.env.user.employee_id,
                                       required=True)
-    is_construction_supervisor = fields.Selection([
+
+    supervisor_ssma_phone = fields.Char(string="Teléfono de trabajo", related='supervisor_ssma.work_phone')
+
+    supervisor_ssma_email = fields.Char(string="E-mail de trabajo", related='supervisor_ssma.work_email')
+
+    is_constr_supervisor = fields.Selection([
         ('yes', 'Sí'),
         ('no', 'No')
-    ], string='¿Existe Responsable de Obra?', default='no')
+    ], string='¿Existe responsable de obra?', default='no', tracking=True)
 
-    construction_supervisor = fields.Char(string="Nombre del Supervisor de Obra")
+    constr_supervisor = fields.Char(string="Nombre del supervisor de obra", tracking=True)
+
+    constr_supervisor_phone = fields.Char(string="Teléfono de contacto", tracking=True)
 
     # Info del empleado---------
 
     employee_id = fields.Many2one(  # Opcional
         comodel_name='hr.employee', string="Empleado",
         ondelete='set null', index=True,
-        help="Empleado involucrado (opcional). Al seleccionar, se despliegan más campos", tracking=True)
+        help="Empleado involucrado (opcional dependiendo la SS). Al seleccionar, se despliegan más campos", tracking=True)
 
-    employee_picture = fields.Image(related='employee_id.image_1920', string='', readonly=True)
+    employee_picture = fields.Image(related='employee_id.image_1920', readonly=True)
 
-    job_id = fields.Many2one(comodel_name='hr.job',
-                             related='employee_id.job_id',
-                             string="Puesto de trabajo",
-                             help="Puesto al que pertenece empleado",
-                             store=True,
-                             readonly=True)
+    company_employee_id = fields.Many2one(comodel_name='res.company',
+                                    related='employee_id.company_id',
+                                    string="Empresa",
+                                    help="Empresa donde labora el empleado",
+                                    store=True,
+                                    readonly=True)
 
     department_id = fields.Many2one(comodel_name='hr.department',
                                     related='employee_id.department_id',
@@ -119,12 +144,30 @@ class SecuritySituation(models.Model):
                                     store=True,
                                     readonly=True)
 
+    job_id = fields.Many2one(comodel_name='hr.job',
+                             related='employee_id.job_id',
+                             string="Puesto de trabajo",
+                             help="Puesto que desempeña el empleado",
+                             store=True,
+                             readonly=True)
+
+    employee_type = fields.Selection(string="Tipo de empleado", related='employee_id.employee_type', help="")
+
     parent_id = fields.Many2one(comodel_name='hr.employee',
                                 related='employee_id.parent_id',
                                 string="Líder directo",
                                 help="Líder directo a cargo del empleado",
                                 store=True,
                                 readonly=True)
+
+    private_phone = fields.Char(string='Teléfono Personal', related='employee_id.private_phone')
+    private_email = fields.Char(string='Correo Personal', related='employee_id.private_email')
+    private_street = fields.Char(string="Dirección Particular", related='employee_id.private_street')
+    private_street2 = fields.Char(string="", related='employee_id.private_street2')
+    private_state_id = fields.Many2one(string="Estado", related='employee_id.private_state_id')
+    private_city = fields.Char(string="Ciudad", related='employee_id.private_city')
+    marital = fields.Selection(string="Estado Civil", related='employee_id.marital', tracking=False)
+    birthday = fields.Date(string="Fecha de nacimiento", related='employee_id.birthday', tracking=False)
 
     actual_laboral_state = fields.Selection([
         ('normal', 'Actividades normales'),
@@ -154,9 +197,9 @@ class SecuritySituation(models.Model):
     is_injuried = fields.Selection([
         ('yes', 'Sí'),
         ('no', 'No')
-    ], string='¿Resultó Herido?', default='no', help='Al seleccionar "Sí", se abrirán otros campos')
+    ], string='¿Resultó Herido?', default='no', help='Al seleccionar "Sí", se abrirán otros campos', tracking=True)
 
-    is_initial_attention = fields.Boolean(string="¿Hubo atención medica inicial?")
+    is_initial_attention = fields.Boolean(string="¿Hubo atención medica inicial?", tracking=True)
 
     injury_type_id = fields.Many2one(comodel_name='injury.type',
                                      string="Tipo de lesión",
@@ -183,20 +226,20 @@ class SecuritySituation(models.Model):
         ('fatal', 'Fatal'),
     ], string="Severidad de la lesión", tracking=True)
 
-    injury_description = fields.Text(string="Descripción detallada de la lesión")
+    injury_description = fields.Text(string="Descripción detallada de la lesión", tracking=True)
 
     injured_body_part = fields.Many2many('body.parts',
-                                         string='Partes del Cuerpo Lesionadas')
+                                         string='Partes del Cuerpo Lesionadas', tracking=True)
 
     # Notebook: Detalles y evidencias------------
 
-    details_whats = fields.Text(string="Qué pasó")
-    details_how = fields.Text(string="Cómo pasó")
-    details_when = fields.Text(string="Cuándo pasó", help="Secuencia Cronológica del Suceso")
+    details_whats = fields.Text(string="Qué pasó", tracking=True)
+    details_how = fields.Text(string="Cómo pasó", tracking=True)
+    details_when = fields.Text(string="Cuándo pasó", help="Secuencia Cronológica del Suceso", tracking=True)
 
-    details_materials = fields.Text(string="Materiales y Equipo")
-    details_enviroment = fields.Text(string="Entorno")
-    details_human_factors = fields.Text(string="Factores Humanos")
+    details_materials = fields.Text(string="Materiales y Equipo", tracking=True)
+    details_enviroment = fields.Text(string="Entorno", tracking=True)
+    details_human_factors = fields.Text(string="Factores Humanos", tracking=True)
 
     evidence_photo_1 = fields.Image(string="Foto de evidencia 1", max_width=1280, max_height=720)
     evidence_photo_2 = fields.Image(string="Foto de evidencia 2", max_width=1280, max_height=720)
@@ -316,39 +359,39 @@ class SecuritySituation(models.Model):
         return super().create(vals_list)
 
     # Usado para mostrar mensaje del regreso de actividades
-    @api.depends('return_activities_date')
-    def _compute_return_date_warning(self):
-        today = date.today()
-        seven_days_later = today + timedelta(days=7)
-
-        for record in self:
-            warning = False
-            return_date = record.return_activities_date
-
-            if not return_date:
-                record.return_date_warning = False
-                continue
-            if return_date == today:
-                warning = "¡ATENCIÓN! El empleado debería estar actualmente en labores."
-            elif today < return_date <= seven_days_later:
-                remaining_days = (return_date - today).days
-                warning = f"AVISO: El empleado regresa en {remaining_days} días ({return_date.strftime('%d-%m-%Y')})."
-            elif return_date < today:
-                warning = "NOTA: La fecha de regreso ya pasó. Verifique el estado laboral."
-            else:  # Fecha lejana
-                warning = f"La fecha de regreso está programada para {return_date.strftime('%d-%m-%Y')}."
-
-            record.return_date_warning = warning
+    # @api.depends('return_activities_date')
+    # def _compute_return_date_warning(self):
+    #     today = date.today()
+    #     seven_days_later = today + timedelta(days=7)
+    #
+    #     for record in self:
+    #         warning = False
+    #         return_date = record.return_activities_date
+    #
+    #         if not return_date:
+    #             record.return_date_warning = False
+    #             continue
+    #         if return_date == today:
+    #             warning = "¡ATENCIÓN! El empleado debería estar actualmente en labores."
+    #         elif today < return_date <= seven_days_later:
+    #             remaining_days = (return_date - today).days
+    #             warning = f"AVISO: El empleado regresa en {remaining_days} días ({return_date.strftime('%d-%m-%Y')})."
+    #         elif return_date < today:
+    #             warning = "NOTA: La fecha de regreso ya pasó. Verifique el estado laboral."
+    #         else:  # Fecha lejana
+    #             warning = f"La fecha de regreso está programada para {return_date.strftime('%d-%m-%Y')}."
+    #
+    #         record.return_date_warning = warning
 
     # Para calcular la fecha de regreso de actividades
-    @api.depends('return_activities_date', 'given_days', 'event_date')
-    def _compute_return_activities_date(self):
-        for date in self:
-            init_date = date.event_date
-            incapacity_days = datetime.timedelta(days=date.given_days)
-            newDate = init_date + incapacity_days
-
-            date.return_activities_date = newDate
+    # @api.depends('return_activities_date', 'given_days', 'event_date')
+    # def _compute_return_activities_date(self):
+    #     for date in self:
+    #         init_date = date.event_date
+    #         incapacity_days = datetime.timedelta(days=date.given_days)
+    #         newDate = init_date + incapacity_days
+    #
+    #         date.return_activities_date = newDate
 
     # Restriccion para los dias de incapacidad
     @api.constrains('given_days')
@@ -363,10 +406,11 @@ class SecuritySituation(models.Model):
         if self.type != 'restricted_work_case':
             self.rwc_days = 0
 
-    @api.onchange('is_construction_supervisor')
-    def _onchange_is_construction_supervisor(self):
-        if self.is_construction_supervisor == 'no':
-            self.construction_supervisor = ""
+    @api.onchange('is_constr_supervisor')
+    def _onchange_is_constr_supervisor(self):
+        if self.is_constr_supervisor == 'no':
+            self.constr_supervisor = ""
+            self.constr_supervisor_phone = ""
 
     @api.onchange('attention_type')
     def _onchange_attention_type(self):
@@ -394,3 +438,10 @@ class SecuritySituation(models.Model):
         if self.employee_id:
             self.actual_laboral_state = 'normal'
             self.is_injuried = 'no'
+
+    @api.onchange('location_situation')
+    def _onchange_location_situation(self):
+        if self.location_situation != 'inside':
+            self.company_id = False
+            self.work_center_id = False
+            self.work_area_id = False

@@ -6,12 +6,11 @@
         <field name="arch" type="xml">
             <list string="Situación de Seguridad" expand="1">
                 <field name="name" readonly="1" decoration-bf="1"/>
+                <field name="event_date" context="{'time_format': 'HH:mm'}" string="Fecha y hora del evento"/>
                 <field name="type"/>
-                <field name="event_date" context="{'time_format': 'HH:mm'}"/>
-                <field name="employee_id" widget="many2one_avatar_user"/>
-                <field name="work_center_id"/>
-                <field name="work_area_id"/>
-                <field name="event_severity"/>
+                <field name="employee_id" widget="many2one_avatar_user" string="Empleado involucrado"/>
+                <field name="is_injuried" string="¿Resultó en heridos?"/>
+                <field name="location_situation" string="Lugar"/>
                 <field name="state" widget="badge"
                        decoration-info="state == 'active'"
                        decoration-success="state == 'concluded'"
@@ -47,14 +46,11 @@
                             <field name="create_date" string="Fecha de creación" readonly="1"/>
                         </group>
                     </div>
-                    <group>
+                    <group string="Detalles de la Situación de Seguridad">
                         <group string="Info. de la Situación">
-                            <field name="event_date" string="Fecha del evento" required="1" widget="datetime" context="{'time_format': 'HH:mm'}" readonly="state == 'concluded'"/>
+                            <field name="event_date" required="1" widget="datetime" context="{'time_format': 'HH:mm'}" readonly="state == 'concluded'"/>
                             <field name="type" required="1" readonly="state == 'concluded'"/>
                             <field name="rwc_days" required="type == 'restricted_work_case'" invisible="type != 'restricted_work_case'" readonly="state == 'concluded'"/>
-                            <field name="company_id" readonly="state == 'concluded'"/>
-                            <field name="work_center_id" required="1" options="{'no_create': True}" readonly="state == 'concluded'" domain="[('company_id', '=', company_id)]"/>
-                            <field name="work_area_id" string="Área / Lugar exacto" readonly="state == 'concluded'" domain="[('location_id', '=', work_center_id)]"/>
                             <field name="activities_type_id" readonly="state == 'concluded'"/>
                             <field name="event_severity" required="1" readonly="state == 'concluded'"/>
                             <field name="cause" required="1" readonly="state == 'concluded'"/>
@@ -62,33 +58,63 @@
                             <field name="follow" readonly="state == 'concluded'" widget="many2one_avatar_user"/>
                             <field name="witnesses" widget="many2many_tags" readonly="state == 'concluded'" options="{'no_open': False, 'no_create': True}"/>
                         </group>
-                        <group string="Responsables">
-                            <field name="supervisor_ssma" options="{'no_create': True}" required="1" widget="many2one_avatar_user" readonly="state == 'concluded'"/>
-                            <field name="is_construction_supervisor" readonly="state == 'concluded'" widget="radio" options="{'horizontal': true}"/>
-                            <field name="construction_supervisor" readonly="state == 'concluded'" invisible="is_construction_supervisor != 'yes'"/>
+                        <group string="Ubicación de la Situación">
+                            <field name="location_situation" readonly="state == 'concluded'" widget="radio" options="{'horizontal': true}"/>
+                            <field name="company_id" readonly="state == 'concluded'" invisible="location_situation != 'inside'" required="location_situation == 'inside'"/>
+                            <field name="phone_company" invisible="not company_id"/>
+                            <field name="company_street" invisible="not company_id"/>
+                            <field name="company_street2" invisible="not company_id"/>
+                            <field name="company_city" invisible="not company_id"/>
+                            <field name="company_state_id" invisible="not company_id"/>
+                            <field name="work_center_id" required="location_situation == 'inside'" options="{'no_create': True}" readonly="state == 'concluded'" invisible="location_situation != 'inside'"
+                                   domain="[('company_id', '=', company_id)]"/>
+                            <field name="work_area_id" required="location_situation == 'inside'" string="Área / Lugar exacto" readonly="state == 'concluded'" invisible="location_situation != 'inside'"
+                                   domain="[('location_id', '=', work_center_id)]"
+                                   context="{'default_location_id': work_center_id}"/>
                         </group>
                     </group>
-                    <group string="Info. del Empleado">
+                    <group string="Responsables/Supervisores">
+                        <field name="supervisor_ssma" options="{'no_create': True}" required="1" widget="many2one_avatar_user" readonly="state == 'concluded'"/>
+                        <field name="supervisor_ssma_phone"/>
+                        <field name="supervisor_ssma_email"/>
+                        <field name="is_constr_supervisor" readonly="state == 'concluded'" widget="radio" options="{'horizontal': true}"/>
+                        <field name="constr_supervisor" readonly="state == 'concluded'" invisible="is_constr_supervisor != 'yes'" required="is_constr_supervisor == 'yes'"/>
+                        <field name="constr_supervisor_phone" readonly="state == 'concluded'" invisible="is_constr_supervisor != 'yes'" required="is_constr_supervisor == 'yes'"/>
+                    </group>
+                    <group string="Detalles del Empleado">
                         <group>
-                            <group>
+                            <group string="Información Personal">
                                 <field name="employee_id" options="{'no_create': True}" readonly="state == 'concluded'" required="is_injuried == 'yes'"/>
-                                <field name="job_id" invisible="not employee_id"/>
-                                <field name="department_id" invisible="not employee_id"/>
-                                <field name="parent_id" widget="many2one_avatar_user" invisible="not employee_id"/>
+                                <field name="private_phone" invisible="not employee_id"/>
+                                <field name="private_email" invisible="not employee_id"/>
+                                <field name="private_street" invisible="not employee_id"/>
+                                <field name="private_street2" invisible="not employee_id"/>
+                                <field name="private_city" invisible="not employee_id"/>
+                                <field name="private_state_id" invisible="not employee_id"/>
+                                <field name="marital" invisible="not employee_id"/>
+                                <field name="birthday" invisible="not employee_id"/>
                             </group>
-                            <group>
-                                <field name="employee_picture" widget="image" class="oe_avatar" options="{'preview_image': 'employee_picture'}" invisible="not employee_id"/>
+                            <group string="">
+                                <field name="employee_picture" widget="image" class="oe_avatar" options="{'preview_image': 'employee_picture'}" invisible="not employee_id" string=""/>
                             </group>
                         </group>
-                        <group>
-                            <field name="actual_laboral_state" invisible="not employee_id"/>
+                        <group string="Situación Laboral">
+                            <field name="company_employee_id" invisible="not employee_id"/>
+                            <field name="department_id" invisible="not employee_id"/>
+                            <field name="job_id" invisible="not employee_id"/>
+                            <field name="employee_type" invisible="not employee_id"/>
+                            <field name="parent_id" widget="many2one_avatar_user" invisible="not employee_id"/>
+                            <field name="actual_laboral_state" invisible="not employee_id" readonly="state == 'concluded'"/>
                             <field name="given_days"
-                                   invisible="(not employee_id or actual_laboral_state == 'normal' or not actual_laboral_state) or is_injuried == 'no'"/>
+                                   invisible="not employee_id or actual_laboral_state == 'normal' or not actual_laboral_state"
+                                   readonly="state == 'concluded'"/>
                             <field name="attention_type"
-                                   invisible="(not employee_id or actual_laboral_state == 'normal' or not actual_laboral_state) or is_injuried == 'no'"/>
-                            <field name="currency_id" invisible="1"/>
-                            <field name="attention_cost" invisible="not employee_id or attention_type != 'private' or actual_laboral_state == 'normal' or is_injuried == 'no'"
-                                   help="Costo en pesos Mexicanos" widget="monetary"/>
+                                   invisible="not employee_id or actual_laboral_state == 'normal' or not actual_laboral_state"
+                                   readonly="state == 'concluded'"/>
+                            <field name="currency_id" invisible="1" readonly="state == 'concluded'"/>
+                            <field name="attention_cost" invisible="not employee_id or attention_type != 'private' or actual_laboral_state == 'normal'"
+                                   help="Costo en pesos Mexicanos" widget="monetary"
+                                   readonly="state == 'concluded'"/>
                         </group>
                     </group>
                     <group>
@@ -218,6 +244,10 @@
                             context="{'group_by': 'parent_id'}"/>
                     <filter name="group_by_event_date" string="Fecha"
                             context="{'group_by': 'event_date'}"/>
+                    <filter name="group_by_is_injuried" string="¿Resultó en heridos?"
+                            context="{'group_by': 'is_injuried'}"/>
+                    <filter name="group_by_location_situation" string="Lugar"
+                            context="{'group_by': 'location_situation'}"/>
                 </group>
             </search>
         </field>

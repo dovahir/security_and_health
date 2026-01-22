@@ -7,40 +7,23 @@
         <field name="inherit_id" ref="hr.view_employee_form"/>
         <field name="arch" type="xml">
             <xpath expr="//div[@name='button_box']" position="inside">
-                <button class="oe_stat_button"
-                        type="object"
-                        name="action_open_employee_situations"
-                        help="Situaciones de seguridad registradas de este empleado">
-                    <div>
-                        <span>Situaciones </span><br/>
-                        <span>de Seguridad</span>
+                <button class="oe_stat_button" name="action_open_employee_situations" type="object" icon="fa-plus-square" help="Situaciones de seguridad registradas de este empleado">
+                    <div class="o_stat_info">
+                        <span class="o_stat_text">Situaciones</span>
+                        <span class="o_stat_text">de Seguridad</span>
                     </div>
                 </button>
-
-                <button class="oe_stat_button"
-                        type="object"
-                        name="action_open_employee_health"
-                        help="Registros de Salud para este empleado">
-                    <div>
-                        <span>Registros </span><br/>
-                        <span>de Salud</span>
-                    </div>
-                </button>
-
-                <button class="oe_stat_button"
-                        type="object"
-                        name="action_open_employee_pressure"
-                        help="Registros de Presión para este Empleado">
-                    <div>
-                        <span>Registros </span><br/>
-                        <span>de Presión</span>
+                <button class="oe_stat_button" name="action_open_employee_analysis" type="object" icon="fa-user-md" help="Análisis Médicos registrados de este empleado">
+                    <div class="o_stat_info">
+                        <span class="o_stat_text">Análisis</span>
+                        <span class="o_stat_text">Médicos</span>
                     </div>
                 </button>
             </xpath>
             <notebook position="inside">
                 <page name="employee_pressure" string="Salud y Seguridad">
                     <group string="Información de Salud General">
-                        <field name="blood_type" readonly="1"/>
+                        <field name="blood_type"/>
                         <label for="last_height" string="Estatura (cm)"/>
                         <div><field name="last_height" readonly="1" class="oe_inline"/></div>
                         <label for="last_weight" string="Peso (kg)"/>
@@ -49,7 +32,7 @@
                         <div><field name="last_imc" readonly="1" class="oe_inline"/></div>
                     </group>
                     <group string="Información de Seguridad">
-                        <field name="last_accident_date" readonly="1" string="Último Accidente"/>
+                        <field name="last_ss" readonly="1" options="{'no_open': True}"/>
                     </group>
                     <group string="Promedios de Salud">
                         <label for="avg_systolic" string="Promedio de presión (mmHg)"/>
@@ -58,21 +41,23 @@
                             <span class="oe_inline"> : </span>
                             <field name="avg_diastolic" readonly="1" class="oe_inline"/>
                         </div>
+                        <field name="avg_fc" readonly="1"/>
                     </group>
                     <notebook>
                         <page name="pressure_tracking" string="Seguimiento de la presión">
                             <field name="pressure_daily_ids" widget="section_and_content" nolabel="1">
-                                <list editable="bottom" create="false">
+                                <list editable="bottom" create="true">
                                     <field name="record_date" readonly="1"/>
-                                    <field name="blood_pressure_systolic" readonly="1"/>
-                                    <field name="blood_pressure_diastolic" readonly="1"/>
+                                    <field name="ta_systolic"/>
+                                    <field name="ta_diastolic"/>
+                                    <field name="fc"/>
                                 </list>
                             </field>
                         </page>
                         <page name="medical_analysis" string="Análisis Médicos">
                             <field name="analysis_ids" nolabel="1">
                                 <list create="false">
-                                    <field name="name" readonly="1"/>
+                                    <field name="ref" readonly="1"/>
                                     <field name="file_name" readonly="1"/>
                                     <field name="analysis_date" readonly="1"/>
                                 </list>
@@ -80,13 +65,11 @@
                         </page>
                         <page name="health_records" string="Historial de Salud">
                             <field name="health_record_ids" nolabel="1">
-                                <list editable="bottom" create="false">
+                                <list editable="bottom" create="true">
                                     <field name="record_date" readonly="1"/>
-                                    <field name="height" readonly="1"/>
-                                    <field name="weight" readonly="1"/>
-                                    <field name="blood_type" readonly="1"/>
+                                    <field name="height"/>
+                                    <field name="weight"/>
                                     <field name="imc" readonly="1"/>
-                                    <field name="notes"/>
                                 </list>
                             </field>
                         </page>

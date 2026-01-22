@@ -12,4 +12,4 @@ class InjuryType(models.Model):
     #     ('name_unique_injury', 'unique (name)', 'Este tipo de lesión ya existe')
     # ]
 
-    _name_unique_injury = models.Constraint('unique (name)','Este tipo de lesión ya existe')
+    _name_unique_injury = models.Constraint('unique (name)', 'Este tipo de lesión ya existe')

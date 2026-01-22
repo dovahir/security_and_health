@@ -10,19 +10,22 @@ class MedicalAnalysis(models.Model):
     _inherit = ['mail.thread', 'mail.activity.mixin']
 
     # Campos del formulario
-    name = fields.Char(string='Referencia', required=True, default='Nuevo análisis')
+    ref = fields.Char(string='Referencia', required=True, copy=False, index=True,
+                       default=lambda self: _('Nuevo Análisis'),
+                       tracking=True, readonly=True)
+
     type_id = fields.Many2one('medical.analysis.type',
                               string="Tipo de Análisis",
                               required=True,
-                              tracking=True)
+                              tracking=True, help="Tipo de analisis realizado. Se pueden agregar más desde ´Catálogos´")
     employee_id = fields.Many2one('hr.employee',
                                   string='Empleado',
                                   ondelete='cascade',
                                   required=True,
                                   tracking=True)
-    analysis_date = fields.Date(string='Fecha de analisis', required=True, default=fields.Date.today, tracking=True)
-    laboratory = fields.Char(string='Laboratorio', tracking=True)
-    laboratory_phone = fields.Char(string='Contacto', tracking=True)
+    analysis_date = fields.Date(string='Fecha de Analisis', required=True, default=fields.Date.today, tracking=True)
+    laboratory = fields.Char(string='Laboratorio', tracking=True, required=True, help="Laboratorio donde se realizó el analisis")
+    laboratory_phone = fields.Char(string='Contacto', tracking=True, help="Num. de contacto del laboratorio")
 
     # Notebook de Resultados del analisis
     analysis_line_ids = fields.One2many(
@@ -42,7 +45,20 @@ class MedicalAnalysis(models.Model):
         ('ready', 'Concluido'),
     ], string='Estado', default='draft', required=True, tracking=True)
 
-    # Metodo de cambio de estado
+    view_pdf = fields.Selection([
+        ('show', 'Visualizar PDF'),
+        ('hide', 'Ocultar PDF'),
+    ], string='view PDF', default='hide')
+
+    # Metodo usado para la secuencia de ref (referencia)
+    @api.model_create_multi
+    def create(self, vals_list):
+        for vals in vals_list:
+            if vals.get('ref', _('Nuevo Análisis')) == _('Nuevo Análisis'):
+                vals['ref'] = (self.env['ir.sequence'].next_by_code('medical.analysis'))
+        return super().create(vals_list)
+
+    # Metodos de cambio state
     def action_draft(self):
         """ Vuelve el estrado a Borrador """
         self.ensure_one()
@@ -52,6 +68,20 @@ class MedicalAnalysis(models.Model):
         """ Marca como Listo """
         self.ensure_one()
         self.state = 'ready'
+
+    # Metodos de cambio view_pdf
+    def action_show(self):
+        self.ensure_one()
+        self.view_pdf = 'show'
+
+    def action_hide(self):
+        self.ensure_one()
+        self.view_pdf = 'hide'
+
+    @api.onchange('analysis_file')
+    def _onchange_analysis_file(self):
+        if not self.analysis_file:
+            self.view_pdf = 'hide'
 
     # Plantilla de parámetros del análisis
     @api.onchange('type_id')
@@ -116,6 +146,3 @@ class MedicalAnalysis(models.Model):
 
             if not num.laboratory_phone.isdigit():
                 raise UserError (_("Solo se admiten números en el campo Contacto"))
-            total = len(num.laboratory_phone)
-            if total != 10:
-                raise UserError(_("No es un número de contacto valido"))

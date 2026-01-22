@@ -12,4 +12,4 @@ class ActivitiesType(models.Model):
     # ]
 
     _name_unique_activities = models.Constraint('unique (name)',
-                                                   'Este tipo de actividad ya existe')
+                                                'Este tipo de actividad ya existe')

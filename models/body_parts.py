@@ -13,4 +13,4 @@ class BodyParts(models.Model):
     # ]
 
     _name_unique_body_part = models.Constraint('unique (name)',
-                                                'Esta parte del cuerpo ya está registrada.')
+                                               'Esta parte del cuerpo ya está registrada.')
