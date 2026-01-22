@@ -5,11 +5,18 @@
             <t t-call="web.html_container">
                 <t t-foreach="docs" t-as="doc">
                     <t t-call="web.external_layout">
+                        <xpath expr="//head" position="inside">
+                            <link rel='stylesheet' href="/security_and_health/static/src/css/style_report.css"/>
+                        </xpath>
                         <div class="page">
-
                             <h3>Situación de Seguridad: <span t-field="doc.security_situation_id.name"/></h3>
                             <p><strong>Fecha de Reporte:</strong> <span t-field="doc.create_date" t-options='{"widget": "date"}'/></p>
-                            <p><strong>Supervisor SSMA:</strong> <span t-field="doc.security_situation_id.supervisor_ssma"/></p>
+                            <p>
+                                <strong>Supervisor SSMA:</strong> <span t-field="doc.security_situation_id.supervisor_ssma"/>
+                                <t t-if="doc.security_situation_id.is_constr_supervisor">
+                                    <strong>Supervisor de obra: <span t-field="doc.security_situation_id.constr_supervisor"/></strong>
+                                </t>
+                            </p>
 
                             <hr/>
 
