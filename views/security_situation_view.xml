@@ -228,14 +228,10 @@
                 <group>
                     <filter name="group_by_type" string="Tipo"
                             context="{'group_by': 'type'}"/>
-                    <filter name="group_by_injury_type" string="Tipo de lesión"
-                            context="{'group_by': 'injury_type_id'}"/>
                     <filter name="group_by_factor_type" string="Factor Tipo"
                             context="{'group_by': 'factor_type'}"/>
                     <filter name="group_by_severity" string="Severidad"
                             context="{'group_by': 'event_severity'}"/>
-                    <filter name="group_by_injured_body_part" string="Parte del cuerpo lesionada"
-                            context="{'group_by': 'injured_body_part'}"/>
                     <filter name="group_by_work_center" string="Ubicaciones de Trabajo"
                             context="{'group_by': 'work_center_id'}"/>
                     <filter name="group_by_employee" string="Empleado"
