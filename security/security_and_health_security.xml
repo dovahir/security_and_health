@@ -1,35 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-<!--        Categorias-->
-    <record model="ir.module.category" id="category_security_and_health">
-        <field name="name">Seguridad y Salud</field>
-        <field name="sequence">50</field>
-    </record>
 
-    <record model="ir.module.category" id="category_security_and_health_acceso">
-        <field name="name">Acceso</field>
-        <field name="sequence">1</field>
-        <field name="parent_id" ref="category_security_and_health"/>
-    </record>
+    <!--        Categorias-->
+        <record id="category_security_and_health" model="ir.module.category">
+            <field name="name">Seguridad y Salud</field>
+            <field name="sequence">50</field>
+        </record>
+
+<!--        Sub-Categoria-->
+        <record id="res_groups_privilege_access" model="res.groups.privilege">
+            <field name="name">Acceso</field>
+            <field name="description">Establece el tipo de acceso que tendrá el usuario</field>
+<!--            <field name="placeholder">View</field>-->
+            <field name="category_id" ref="category_security_and_health"/>
+            <field name="sequence">10</field>
+        </record>
 
 <!--    Grupos-->
     <record id="group_security_and_health_only_read" model="res.groups">
         <field name="name">Solo lectura</field>
-        <field name="category_id" ref="category_security_and_health_acceso"/>
+        <field name="sequence">5</field>
+        <field name="privilege_id" ref="res_groups_privilege_access"/>
         <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
     </record>
 
     <record id="group_security_and_health_employee" model="res.groups">
-        <field name="name">Empleados</field>
-        <field name="category_id" ref="category_security_and_health_acceso"/>
+        <field name="name">Para empleados</field>
+        <field name="sequence">10</field>
+        <field name="privilege_id" ref="res_groups_privilege_access"/>
         <field name="implied_ids" eval="[(6, 0, [ref('base.group_user')])]"/>
     </record>
 
     <record id="group_security_and_health_manager" model="res.groups">
         <field name="name">Acceso Total</field>
-        <field name="category_id" ref="category_security_and_health_acceso"/>
+        <field name="sequence">20</field>
+        <field name="privilege_id" ref="res_groups_privilege_access"/>
         <field name="implied_ids" eval="[(4, ref('group_security_and_health_employee'))]"/>
-        <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+        <field name="user_ids" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
     </record>
 
     <data noupdate="1">

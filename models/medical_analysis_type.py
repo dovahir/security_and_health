@@ -11,6 +11,9 @@ class MedicalAnalysisType(models.Model):
                                      string='Parámetros Incluidos'
     )
 
-    _sql_constraints = [
-        ('name_unique_analysis_type', 'unique (name)', 'Este tipo de analisis ya existe')
-    ]
+    # _sql_constraints = [
+    #     ('name_unique_analysis_type', 'unique (name)', 'Este tipo de analisis ya existe')
+    # ]
+
+    _name_unique_analysis_type = models.Constraint('unique (name)',
+                                                   'Este tipo de análisis ya existe')
