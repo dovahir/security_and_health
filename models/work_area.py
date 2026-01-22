@@ -9,9 +9,9 @@ class WorkArea(models.Model):
                                    string="Ubicación",
                                    ondelete='cascade')
 
-    # _sql_constraints = [
-    #     ('name_unique', 'unique (work_center_id, name)', 'Esta área de trabajo ya existe en este centro')
-    # ]
+    _sql_constraints = [
+        ('name_unique', 'unique (name, location_id)', 'Esta área de trabajo ya existe en este centro')
+    ]
 
 
 class WorkCenter(models.Model):

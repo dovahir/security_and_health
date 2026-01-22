@@ -66,8 +66,11 @@
                             <field name="company_street2" invisible="not company_id"/>
                             <field name="company_city" invisible="not company_id"/>
                             <field name="company_state_id" invisible="not company_id"/>
-                            <field name="work_center_id" required="location_situation == 'inside'" options="{'no_create': True}" readonly="state == 'concluded'" domain="[('company_id', '=', company_id)]" invisible="location_situation != 'inside'"/>
-                            <field name="work_area_id" required="location_situation == 'inside'" string="Área / Lugar exacto" readonly="state == 'concluded'" domain="[('location_id', '=', work_center_id)]" invisible="location_situation != 'inside'"/>
+                            <field name="work_center_id" required="location_situation == 'inside'" options="{'no_create': True}" readonly="state == 'concluded'" invisible="location_situation != 'inside'"
+                                   domain="[('company_id', '=', company_id)]"/>
+                            <field name="work_area_id" required="location_situation == 'inside'" string="Área / Lugar exacto" readonly="state == 'concluded'" invisible="location_situation != 'inside'"
+                                   domain="[('location_id', '=', work_center_id)]"
+                                   context="{'default_location_id': work_center_id}"/>
                         </group>
                     </group>
                     <group string="Responsables/Supervisores">

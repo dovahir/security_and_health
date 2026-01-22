@@ -7,22 +7,16 @@
         <field name="inherit_id" ref="hr.view_employee_form"/>
         <field name="arch" type="xml">
             <xpath expr="//div[@name='button_box']" position="inside">
-                <button class="oe_stat_button"
-                        type="object"
-                        name="action_open_employee_situations"
-                        help="Situaciones de seguridad registradas de este empleado">
-                    <div>
-                        <span>Situaciones</span><br/>
-                        <span>de Seguridad</span>
+                <button class="oe_stat_button" name="action_open_employee_situations" type="object" icon="fa-plus-square" help="Situaciones de seguridad registradas de este empleado">
+                    <div class="o_stat_info">
+                        <span class="o_stat_text">Situaciones</span>
+                        <span class="o_stat_text">de Seguridad</span>
                     </div>
                 </button>
-                <button class="oe_stat_button"
-                        type="object"
-                        name="action_open_employee_analysis"
-                        help="Análisis Médicos registrados de este empleado">
-                    <div>
-                        <span>Análisis</span><br/>
-                        <span>Médicos</span>
+                <button class="oe_stat_button" name="action_open_employee_analysis" type="object" icon="fa-user-md" help="Análisis Médicos registrados de este empleado">
+                    <div class="o_stat_info">
+                        <span class="o_stat_text">Análisis</span>
+                        <span class="o_stat_text">Médicos</span>
                     </div>
                 </button>
             </xpath>

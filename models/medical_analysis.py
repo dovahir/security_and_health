@@ -17,15 +17,15 @@ class MedicalAnalysis(models.Model):
     type_id = fields.Many2one('medical.analysis.type',
                               string="Tipo de Análisis",
                               required=True,
-                              tracking=True)
+                              tracking=True, help="Tipo de analisis realizado. Se pueden agregar más desde ´Catálogos´")
     employee_id = fields.Many2one('hr.employee',
                                   string='Empleado',
                                   ondelete='cascade',
                                   required=True,
                                   tracking=True)
     analysis_date = fields.Date(string='Fecha de Analisis', required=True, default=fields.Date.today, tracking=True)
-    laboratory = fields.Char(string='Laboratorio', tracking=True, required=True)
-    laboratory_phone = fields.Char(string='Contacto', tracking=True)
+    laboratory = fields.Char(string='Laboratorio', tracking=True, required=True, help="Laboratorio donde se realizó el analisis")
+    laboratory_phone = fields.Char(string='Contacto', tracking=True, help="Num. de contacto del laboratorio")
 
     # Notebook de Resultados del analisis
     analysis_line_ids = fields.One2many(
