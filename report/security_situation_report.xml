@@ -3,129 +3,214 @@
     <data>
         <template id="report_final_document">
             <t t-call="web.html_container">
-                <t t-foreach="docs" t-as="doc">
+                <t t-foreach="docs" t-as="o">
                     <t t-call="web.external_layout">
-                        <xpath expr="//head" position="inside">
-                            <link rel='stylesheet' href="/security_and_health/static/src/css/style_report.css"/>
-                        </xpath>
-                        <div class="page">
-                            <h3>Situación de Seguridad: <span t-field="doc.security_situation_id.name"/></h3>
-                            <p><strong>Fecha de Reporte:</strong> <span t-field="doc.create_date" t-options='{"widget": "date"}'/></p>
-                            <p>
-                                <strong>Supervisor SSMA:</strong> <span t-field="doc.security_situation_id.supervisor_ssma"/>
-                                <t t-if="doc.security_situation_id.is_constr_supervisor">
-                                    <strong>Supervisor de obra: <span t-field="doc.security_situation_id.constr_supervisor"/></strong>
-                                </t>
-                            </p>
+                        <div class="page" style="width: 210mm; margin: 0 auto; padding: 15mm; font-family: 'DejaVu Sans', sans-serif; font-size: 11pt;">
 
-                            <hr/>
+                            <!-- HEADER PERSONALIZADO (sobreescribe el default) -->
+                            <div class="header" style="height: 30mm; padding: 5mm; text-align: center; border-bottom: 2px solid #2c3e50;">
+                                <h2 style="margin: 0; color: #2c3e50; font-size: 14pt;">REPORTE DE SEGURIDAD</h2>
+                                <h3 style="margin: 0; color: #e74c3c; font-size: 12pt;">
+                                    <span t-field="o.security_situation_id.name"/>
+                                </h3>
+                                <div style="font-size: 8pt; color: #666; margin-top: 2mm;">
+                                    Fecha de emisión: <span t-field="o.create_date" t-options='{"widget": "date"}'/>
+                                </div>
+                            </div>
 
-                            <h4>Detalles del Evento</h4>
-                            <p>
-                                <strong>Fecha y Hora del Evento: </strong><span t-field="doc.security_situation_id.event_date" t-options='{"widget": "datetime"}'/>
-                            </p>
+                            <!-- FOOTER PERSONALIZADO (sobreescribe el default) -->
+                            <div class="footer" style="height: 15mm; padding: 3mm; text-align: center; border-top: 1px solid #ccc; font-size: 7pt; color: #7f8c8d;">
+                                <div>
+                                    Página <span class="page"/> de <span class="topage"/>
+                                </div>
+                            </div>
 
-                            <table class="table table-sm table-borderless" style="width: 100%;">
-                                <thead>
+                            <!-- CONTENIDO PRINCIPAL -->
+                            <div class="article" style="padding: 5mm; font-family: 'DejaVu Sans', sans-serif; font-size: 8pt; line-height: 1.2;">
+
+                                <!-- DATOS BÁSICOS -->
+                                <table style="width: 100%; margin-bottom: 3mm; border-collapse: collapse;">
                                     <tr>
-                                        <td><strong>Tipo de Situación: </strong><span t-field="doc.security_situation_id.type"/></td>
-                                        <td><strong>Empresa: </strong><span t-field="doc.security_situation_id.company_id"/></td>
+                                        <td style="width: 25%; padding: 1mm; border-right: 1px solid #eee;">
+                                            <strong>Fecha Evento:</strong><br/>
+                                            <span t-field="o.security_situation_id.event_date" t-options='{"widget": "datetime"}'/>
+                                        </td>
+                                        <td style="width: 25%; padding: 1mm; border-right: 1px solid #eee;">
+                                            <strong>Tipo Situación:</strong><br/>
+                                            <span t-field="o.security_situation_id.type"/>
+                                        </td>
+                                        <td style="width: 25%; padding: 1mm; border-right: 1px solid #eee;">
+                                            <strong>Empresa:</strong><br/>
+                                            <span t-field="o.security_situation_id.company_id.name"/>
+                                        </td>
+                                        <td style="width: 25%; padding: 1mm;">
+                                            <strong>Severidad:</strong><br/>
+                                            <span t-field="o.security_situation_id.event_severity"/>
+                                        </td>
                                     </tr>
-                                    <tr>
-                                        <t t-if="doc.security_situation_id.type == 'restricted_work_case'">
-                                            <td><strong>Días de Trabajo Restringido: </strong><span t-field="doc.security_situation_id.rwc_days"/></td>
-                                            <td><strong>Ubicación de Trabajo:</strong><span t-field="doc.security_situation_id.work_center_id.name"/></td>
-                                        </t>
-                                        <t t-else="">
-                                            <td></td>
-                                            <td><strong>Ubicación de Trabajo:</strong><span t-field="doc.security_situation_id.work_center_id.name"/></td>
-                                        </t>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Tipo de Actividad: </strong><span t-field="doc.security_situation_id.activities_type_id"/></td>
-                                        <td><strong>Área/Lugar Exacto:</strong><span t-field="doc.security_situation_id.work_area_id.name"/></td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Severidad: </strong><span t-field="doc.security_situation_id.event_severity"/></td>
-                                        <t t-if="doc.security_situation_id.is_constr_supervisor == 'yes'">
-                                            <td><strong>Responsable de Obra: </strong><span t-field="doc.security_situation_id.constr_supervisor"/></td>
-                                        </t>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Causa: </strong><span t-field="doc.security_situation_id.cause"/></td>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Medidas Inmediatas: </strong><span t-field="doc.security_situation_id.immediate_actions"/></td>
-                                        <td></td>
-                                    </tr>
-                                </thead>
-                            </table>
+                                </table>
 
-                            <p>
-                                <strong>Descripción del Evento:</strong><br></br>
-                                <span t-field="doc.security_situation_id.details_whats"/>
-                            </p>
+                                <!-- UBICACIÓN Y ACTIVIDAD -->
+                                <table style="width: 100%; margin-bottom: 3mm; border-collapse: collapse;">
+                                    <tr>
+                                        <td style="width: 50%; padding: 1mm; border-right: 1px solid #eee;">
+                                            <strong>Ubicación Trabajo:</strong><br/>
+                                            <span t-field="o.security_situation_id.work_center_id.name"/>
+                                        </td>
+                                        <td style="width: 50%; padding: 1mm;">
+                                            <strong>Área/Lugar Exacto:</strong><br/>
+                                            <span t-field="o.security_situation_id.work_area_id.name"/>
+                                        </td>
+                                    </tr>
+                                </table>
 
-                            <t t-if="doc.security_situation_id.employee_id">
+                                <!-- CAMPOS CONDICIONALES EN LÍNEA -->
+                                <div style="margin-bottom: 3mm;">
+                                    <t t-if="o.security_situation_id.type == 'restricted_work_case'">
+                                        <span style="display: inline-block; margin-right: 5mm;">
+                                            <strong>Días Restringidos:</strong> <span t-field="o.security_situation_id.rwc_days"/>
+                                        </span>
+                                    </t>
+                                    <t t-if="o.security_situation_id.is_constr_supervisor == 'yes'">
+                                        <span style="display: inline-block;">
+                                            <strong>Responsable Obra:</strong> <span t-field="o.security_situation_id.constr_supervisor"/>
+                                        </span>
+                                    </t>
+                                </div>
 
-                                <hr/>
+                                <!-- CAUSA Y MEDIDAS EN PARALELO -->
+                                <div style="display: flex; gap: 3mm; margin-bottom: 3mm;">
+                                    <div style="flex: 1; border: 1px solid #3498db; padding: 2mm;">
+                                        <div style="background: #3498db; color: white; padding: 1mm 2mm; font-size: 7pt; margin: -2mm -2mm 1mm -2mm;">
+                                            <strong>CAUSA</strong>
+                                        </div>
+                                        <div style="height: 12mm; overflow: hidden;">
+                                            <span t-field="o.security_situation_id.cause"/>
+                                        </div>
+                                    </div>
+                                    <div style="flex: 1; border: 1px solid #2ecc71; padding: 2mm;">
+                                        <div style="background: #2ecc71; color: white; padding: 1mm 2mm; font-size: 7pt; margin: -2mm -2mm 1mm -2mm;">
+                                            <strong>MEDIDAS INMEDIATAS</strong>
+                                        </div>
+                                        <div style="height: 12mm; overflow: hidden;">
+                                            <span t-field="o.security_situation_id.immediate_actions"/>
+                                        </div>
+                                    </div>
+                                </div>
 
-                                <h4>Información del Empleado</h4>
-                                <table class="table table-sm table-borderless" style="width: 100%;">
-                                    <thead>
-                                        <tr>
-                                            <td><strong>Empleado Involucrado: </strong><span t-field="doc.security_situation_id.employee_id.name"/></td>
-                                            <td><strong>Estado Laboral: </strong><span t-field="doc.security_situation_id.actual_laboral_state"/></td>
-                                        </tr>
-                                        <tr>
-                                            <td><strong>Puesto al que pertenece: </strong><span t-field="doc.security_situation_id.job_id"/></td>
-                                            <t t-if="doc.security_situation_id.actual_laboral_state != 'normal'">
-                                                <td><strong>Días de incapacidad: </strong><span t-field="doc.security_situation_id.given_days"/></td>
+                                <!-- DESCRIPCIÓN COMPACTADA -->
+                                <div style="margin-bottom: 3mm;">
+                                    <div style="background: #9b59b6; color: white; padding: 1mm 2mm; font-size: 7pt;">
+                                        <strong>DESCRIPCIÓN DEL EVENTO</strong>
+                                    </div>
+                                    <div style="border: 1px solid #9b59b6; padding: 2mm; height: 20mm; overflow: hidden;">
+                                        <span t-field="o.security_situation_id.details_whats"/>
+                                    </div>
+                                </div>
+
+                                <!-- INFORMACIÓN DEL EMPLEADO (SI APLICA) -->
+                                <t t-if="o.security_situation_id.employee_id">
+                                    <div style="margin-bottom: 3mm; border-top: 1px solid #e67e22; padding-top: 2mm;">
+                                        <div style="background: #e67e22; color: white; padding: 1mm 2mm; font-size: 7pt; margin-bottom: 1mm;">
+                                            <strong>INFORMACIÓN DEL EMPLEADO</strong>
+                                        </div>
+
+                                        <!-- DATOS EMPLEADO EN GRID -->
+                                        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1mm; margin-bottom: 1mm;">
+                                            <div>
+                                                <strong>Nombre:</strong><br/>
+                                                <span t-field="o.security_situation_id.employee_id.name"/>
+                                            </div>
+                                            <div>
+                                                <strong>Estado Laboral:</strong><br/>
+                                                <span t-field="o.security_situation_id.actual_laboral_state"/>
+                                            </div>
+                                            <div>
+                                                <strong>Puesto:</strong><br/>
+                                                <span t-field="o.security_situation_id.job_id.name"/>
+                                            </div>
+                                            <div>
+                                                <strong>Departamento:</strong><br/>
+                                                <span t-field="o.security_situation_id.department_id.name"/>
+                                            </div>
+                                        </div>
+
+                                        <!-- DATOS ADICIONALES EMPLEADO -->
+                                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1mm;">
+                                            <t t-if="o.security_situation_id.actual_laboral_state != 'normal'">
+                                                <div>
+                                                    <strong>Días Incapacidad:</strong><br/>
+                                                    <span t-field="o.security_situation_id.given_days"/>
+                                                </div>
                                             </t>
-                                        </tr>
-                                        <tr>
-                                            <td><strong>Departamento al que pertenece: </strong><span t-field="doc.security_situation_id.department_id"/></td>
-                                            <td><strong>Tipo de atención médica: </strong><span t-field="doc.security_situation_id.attention_type"/></td>
-                                        </tr>
-                                        <tr>
-                                            <td><strong>Líder directo a cargo del empleado: </strong><span t-field="doc.security_situation_id.parent_id"/></td>
-                                            <td></td>
-                                        </tr>
-                                    </thead>
-                                </table>
-                            </t>
+                                            <div>
+                                                <strong>Atención Médica:</strong><br/>
+                                                <span t-field="o.security_situation_id.attention_type"/>
+                                            </div>
+                                            <div>
+                                                <strong>Líder Directo:</strong><br/>
+                                                <span t-field="o.security_situation_id.parent_id.name"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </t>
 
-                            <t t-if="doc.security_situation_id.employee_id and doc.security_situation_id.is_injuried == 'yes'">
+                                <!-- INFORMACIÓN DE LESIONES (SI APLICA) -->
+                                <t t-if="o.security_situation_id.employee_id and o.security_situation_id.is_injuried == 'yes'">
+                                    <div style="margin-bottom: 3mm; border-top: 1px solid #c0392b; padding-top: 2mm;">
+                                        <div style="background: #c0392b; color: white; padding: 1mm 2mm; font-size: 7pt; margin-bottom: 1mm;">
+                                            <strong>INFORMACIÓN DE LESIONES</strong>
+                                        </div>
 
-                                <hr/>
+                                        <!-- DATOS LESIONES EN GRID -->
+                                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1mm; margin-bottom: 1mm;">
+                                            <div>
+                                                <strong>Tipo Lesión:</strong><br/>
+                                                <span t-field="o.security_situation_id.injury_type_id.name"/>
+                                            </div>
+                                            <div>
+                                                <strong>Severidad:</strong><br/>
+                                                <span t-field="o.security_situation_id.injury_severity"/>
+                                            </div>
+                                            <div>
+                                                <strong>Partes Afectadas:</strong><br/>
+                                                <span t-field="o.security_situation_id.injured_body_part"/>
+                                            </div>
+                                        </div>
 
-                                <h4>Información Sobre Lesiones</h4>
-                                <table class="table table-sm table-borderless" style="width: 100%;">
-                                    <thead>
+                                        <!-- DESCRIPCIÓN LESION -->
+                                        <div>
+                                            <strong>Factor Tipo:</strong><br/>
+                                            <span t-field="o.security_situation_id.factor_type"/>
+                                        </div>
+                                        <div style="margin-top: 1mm;">
+                                            <strong>Descripción Lesión:</strong><br/>
+                                            <div style="border: 1px solid #ffcccc; padding: 2mm; height: 15mm; overflow: hidden; background: #fff5f5;">
+                                                <span t-field="o.security_situation_id.injury_description"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </t>
+
+                                <!-- ESPACIO PARA FIRMAS (si necesitas) -->
+                                <div style="margin-top: 5mm; padding-top: 2mm; border-top: 1px dashed #ccc;">
+                                    <table style="width: 100%; font-size: 7pt;">
                                         <tr>
-                                            <td><strong>Tipo de Lesión: </strong><span t-field="doc.security_situation_id.injury_type_id"/></td>
+                                            <td style="width: 50%; text-align: center;">
+                                                ___________________________<br/>
+                                                <strong>Supervisor SSMA</strong><br/>
+                                                <span t-field="o.security_situation_id.supervisor_ssma"/>
+                                            </td>
+                                            <td style="width: 50%; text-align: center;">
+                                                ___________________________<br/>
+                                                <strong>Testigo del Evento</strong>
+                                            </td>
                                         </tr>
-                                        <tr>
-                                            <td><strong>Factor Tipo: </strong><span t-field="doc.security_situation_id.factor_type"/></td>
-                                            <td></td>
-                                        </tr>
-                                        <tr>
-                                            <td><strong>Severidad: </strong><span t-field="doc.security_situation_id.injury_severity"/></td>
-                                            <td></td>
-                                        </tr>
-                                    </thead>
-                                </table>
+                                    </table>
+                                </div>
 
-                                <p>
-                                    <strong>Partes del Cuerpo Afectadas: </strong><span t-field="doc.security_situation_id.injured_body_part"/><br></br>
-                                </p>
+                            </div>
 
-                                <p>
-                                    <strong>Descripción de la Lesión:</strong><br></br>
-                                    <span t-field="doc.security_situation_id.injury_description"/>
-                                </p>
-                            </t>
                         </div>
                     </t>
                 </t>

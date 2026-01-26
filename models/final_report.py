@@ -7,6 +7,7 @@ class FinalReport(models.Model):
     _inherit = ['mail.thread', 'mail.activity.mixin']
     _order = 'create_date desc'
 
+    name = fields.Char(string='Test', default='Test')
     # Conectar con situación de seguridad
     security_situation_id = fields.Many2one('security.situation',
                                             string="Situación de Seguridad",
