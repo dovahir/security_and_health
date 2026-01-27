@@ -58,7 +58,7 @@
                             <field name="follow" readonly="state == 'concluded'" widget="many2one_avatar_user"/>
                             <field name="witnesses" widget="many2many_tags" readonly="state == 'concluded'" options="{'no_open': False, 'no_create': True}"/>
                         </group>
-                        <group string="Ubicación de la Situación">
+                        <group string="Lugar de la Situación">
                             <field name="location_situation" readonly="state == 'concluded'" widget="radio" options="{'horizontal': true}"/>
                             <field name="company_id" readonly="state == 'concluded'" invisible="location_situation != 'inside'" required="location_situation == 'inside'"/>
                             <field name="phone_company" invisible="not company_id"/>
@@ -73,7 +73,7 @@
                                    context="{'default_location_id': work_center_id}"/>
                         </group>
                     </group>
-                    <group string="Responsables/Supervisores">
+                    <group string="Supervisores">
                         <field name="supervisor_ssma" options="{'no_create': True}" required="1" widget="many2one_avatar_user" readonly="state == 'concluded'"/>
                         <field name="supervisor_ssma_phone"/>
                         <field name="supervisor_ssma_email"/>
@@ -102,8 +102,8 @@
                             <field name="company_employee_id" invisible="not employee_id"/>
                             <field name="department_id" invisible="not employee_id"/>
                             <field name="job_id" invisible="not employee_id"/>
-                            <field name="employee_type" invisible="not employee_id"/>
                             <field name="parent_id" widget="many2one_avatar_user" invisible="not employee_id"/>
+                            <field name="employee_type" invisible="not employee_id"/>
                             <field name="actual_laboral_state" invisible="not employee_id" readonly="state == 'concluded'"/>
                             <field name="given_days"
                                    invisible="not employee_id or actual_laboral_state == 'normal' or not actual_laboral_state"

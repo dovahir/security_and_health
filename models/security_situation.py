@@ -99,7 +99,7 @@ class SecuritySituation(models.Model):
                                    string="Área / Lugar exacto",
                                    help="Debe seleccionar ubicación de trabajo", tracking=True)
 
-    # Responsables--------
+    # Supervisores--------
 
     supervisor_ssma = fields.Many2one(comodel_name='hr.employee',
                                       string="Supervisor SSMA",
@@ -115,7 +115,7 @@ class SecuritySituation(models.Model):
     is_constr_supervisor = fields.Selection([
         ('yes', 'Sí'),
         ('no', 'No')
-    ], string='¿Existe responsable de obra?', default='no', tracking=True)
+    ], string='¿Hay algún supervisor de obra?', default='no', tracking=True)
 
     constr_supervisor = fields.Char(string="Nombre del supervisor de obra", tracking=True)
 
@@ -151,14 +151,14 @@ class SecuritySituation(models.Model):
                              store=True,
                              readonly=True)
 
-    employee_type = fields.Selection(string="Tipo de empleado", related='employee_id.employee_type', help="")
-
     parent_id = fields.Many2one(comodel_name='hr.employee',
                                 related='employee_id.parent_id',
                                 string="Líder directo",
                                 help="Líder directo a cargo del empleado",
                                 store=True,
                                 readonly=True)
+
+    employee_type = fields.Selection(string="Tipo de empleado", related='employee_id.employee_type', help="")
 
     private_phone = fields.Char(string='Teléfono Personal', related='employee_id.private_phone')
     private_email = fields.Char(string='Correo Personal', related='employee_id.private_email')
