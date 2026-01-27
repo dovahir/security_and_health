@@ -52,8 +52,8 @@
                             <field name="type" required="1" readonly="state == 'concluded'"/>
                             <field name="rwc_days" required="type == 'restricted_work_case'" invisible="type != 'restricted_work_case'" readonly="state == 'concluded'"/>
                             <field name="activities_type_id" readonly="state == 'concluded'"/>
-                            <field name="event_severity" required="1" readonly="state == 'concluded'"/>
                             <field name="cause" required="1" readonly="state == 'concluded'"/>
+                            <field name="event_severity" required="1" readonly="state == 'concluded'"/>
                             <field name="immediate_actions" required="1" readonly="state == 'concluded'"/>
                             <field name="follow" readonly="state == 'concluded'" widget="many2one_avatar_user"/>
                             <field name="witnesses" widget="many2many_tags" readonly="state == 'concluded'" options="{'no_open': False, 'no_create': True}"/>
