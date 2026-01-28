@@ -135,6 +135,7 @@
 
                             /* ESTILOS PARA ÁREAS DE TEXTO CON BORDE */
                             .text-area-box {
+                                font-size: 8pt;
                                 border: 1px solid #ffcccc;
                                 padding: 2mm;
                                 height: 15mm;
@@ -157,7 +158,7 @@
                             }
 
                             .signature-line {
-                                margin-top: 20mm;
+                                margin-top: 10mm;
                                 border-top: 1px solid #000;
                                 width: 60mm;
                                 display: inline-block;
@@ -191,7 +192,7 @@
                         <div class="report-container">
                             <div class="page">
                                 <!-- HEADER PERSONALIZADO (sobreescribe el default) -->
-                                <div class="header custom-header">
+                                <div class="custom-header">
                                     <h2>REPORTE DE SEGURIDAD</h2>
                                     <h3>
                                         <span t-field="o.security_situation_id.name"/> <!-- referencia -->
