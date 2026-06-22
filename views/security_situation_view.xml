@@ -190,7 +190,7 @@
         </field>
     </record>
 
-    <!-- Filtros -->
+<!--    Filtros -->
     <record id="view_security_situation_search" model="ir.ui.view">
         <field name="name">Security Situation Search</field>
         <field name="model">security.situation</field>

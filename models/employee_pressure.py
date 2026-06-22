@@ -127,16 +127,16 @@ class EmployeePressure(models.Model):
         result = super().unlink()
 
         # Publicar después de unlink (los registros ya no existen, pero messages sí)
-        for situation, pressure_display in messages:
+        for situation in messages:
             situation.message_post(
                 body=Markup(
                     """
                     <div style="font-family: Arial, sans-serif; line-height: 1.6; text-align: justify;">
                         <b>📋 TOMA DE PRESION ELIMINADO</b><br/>
-                        <span style="margin-left: 20px;">• Se eliminó el registro de la fecha: %s</span>
+                        <span style="margin-left: 20px;">• Se eliminó el registro de la fecha: </span>
                     </div>
                     """) % (
-                         pressure_display,
+                         # pressure_display,
                      ),
             )
 

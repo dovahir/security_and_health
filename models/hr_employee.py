@@ -32,7 +32,8 @@ class HREmployee(models.Model):
     last_ss = fields.Many2one(
         'security.situation',
         string='Última SS Relacionada',
-        compute='_compute_last_ss'
+        compute='_compute_last_ss',
+        help='Para ver todas las situaciones de seguridad de este empleado, click en el boton "Situaciones de Seguridad" en la parte superior'
     )
     avg_systolic = fields.Integer(string='Promedio Sistólico', compute='_compute_average_pressure', store=True)
     avg_diastolic = fields.Integer(string='Promedio Diastólica', compute='_compute_average_pressure', store=True)
